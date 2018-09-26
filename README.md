@@ -1,7 +1,7 @@
 # FastBase
 Data Convergence Engine
 
-FastBase is a data convergence server for JDBC-enabled data sources. 
+FastBase is a data convergence server for JDBC-enabled data sources. For inquiries reach out to Niclas Kjäll-Ohlsson (niclasko@gmail.com).
 
 FastBase offers the following capabilities:
 * JDBC connections
@@ -21,6 +21,17 @@ $ java -jar fastbase.jar [-port=4444]
 Then
 * **Config** - Point your browser to [http://localhost:4444](http://localhost:4444) (user/pass: admin/peregrine)
 * **API listing**: [http://localhost:4444/web/api/](http://localhost:4444/web/api/)
+
+**Script usage example (data offloading to CSV)**
+1. Login
+2. Under Connections tab, register JDBC connection as CONNECTION_NAME for data source for offloading data from and click Connect
+3. Under Scripts tab, run or schedule following Javascript-script:
+    ```
+    var query = "select * from bigtable";
+    var outputFilePath = "/data/out.csv";
+    FastBase.queryToFile(CONNECTION_NAME, query, outputFilePath, CSV);
+    output.writeBytes("Done");
+    ```
 
 **API usage example (SQL parser)**
 1. Login

@@ -71,8 +71,7 @@ Then
 **Add JDBC driver**
 1. Stop FastBase if running
 2. Copy JDBC driver to jdbc_drivers directory under runtime directory (directory where fastbase.jar is located)
-3. Add entry for JDBC driver in ./jdbc_drivers/JDBCDrivers.txt
-    For example:
+3. Add entry for JDBC driver in ./jdbc_drivers/JDBCDrivers.txt. For example:
     ```
     [Oracle]
     DriverPath=./jdbc_drivers/Oracle/ojdbc6.jar
@@ -81,3 +80,4 @@ Then
     ValidationQuery=SELECT 1 FROM DUAL
     ConnectionPoolSize=5
     ```
+4. Start FastBase and use JDBC driver

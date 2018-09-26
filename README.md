@@ -81,3 +81,12 @@ Then
     ConnectionPoolSize=5
     ```
 4. Start FastBase and use JDBC driver
+
+**Build**
+1. Build
+    ```
+    $ ./buildjar.sh
+    ```
+2. Copy contents from ./build folder to runtime folder of choice
+3. Run FastBase
+

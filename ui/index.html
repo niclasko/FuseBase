@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+		<meta name="description" content="FastBase UI">
+		<meta name="author" content="Niclas Kjäll-Ohlsson">
+		<link rel="icon" href="../../favicon.ico">
+		
+		<title>FastBase</title>
+		
+		<link rel="stylesheet" type="text/css" href="/web/css/styles.css">
+		<link rel="stylesheet" type="text/css" href="/web/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="/web/css/bootstrap-theme.min.css">
+		
+		<script type="text/javascript" src="/web/js/utils.js"></script>
+		<script type="text/javascript" src="/web/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/web/js/angular.min.js"></script>
+		<script type="text/javascript" src="/web/js/angular-route.min.js"></script>
+		<script type="text/javascript" src="/web/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/web/js/ui-bootstrap.min.js"></script>
+		<script type="text/javascript" src="/web/js/FastBaseWebClient.js"></script>
+		
+		<script type="text/javascript">
+			
+		</script>
+	</head>
+	<body onload="">
+		
+		<div ng-app="ngFastBase" ng-controller="FastBaseWebClientControl">
+			
+			<!-- Fixed navbar -->
+			<nav class="navbar navbar-default navbar-pf" role="navigation">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#/">FastBase</a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li><a href="#/">Home</a></li>
+							<li><a href="#connections">Connections</a></li>
+							<li><a href="#queries">Queries</a></li>
+							<li><a href="#scripts">Scripts</a></li>
+							<li><a href="#users">Users</a></li>
+							<li><a href="#system">System</a></li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+							<li class="dropdown notactive">
+								<a href="javascript:void(null)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+									<span class="glyphicon glyphicon-user"></span>
+									{{currentUsername}}<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+									<li class="notactive"><a href="javascript:void(null)">Profile</a></li>
+									<li role="separator" class="divider"></li>
+									<li class="notactive"><a href="/user/logout">Logout</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div>
+			</nav>
+			
+			<div class="container">
+				<div id="feedback" class="alert alert-dismissible" role="alert" hidden="true">
+					<span id="feedbackMessage"></span>
+					<button type="button" class="close" onclick="$('#feedback').hide();" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+			</div>
+			
+			<div class="container" ng-view></div> <!-- /container -->
+			
+		</div>
+		
+	</body>
+</html>

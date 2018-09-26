@@ -1,0 +1,90 @@
+[Oracle]
+DriverPath=./jdbc_drivers/Oracle/ojdbc6.jar
+ClassName=oracle.jdbc.driver.OracleDriver
+ConnectStringPattern=jdbc:oracle:thin:@//hostname:port/servicename
+ValidationQuery=SELECT 1 FROM DUAL
+ConnectionPoolSize=5
+
+[HANA]
+DriverPath=./jdbc_drivers/SAP Hana/ngdbc.jar
+ClassName=com.sap.db.jdbc.Driver
+ConnectStringPattern=jdbc:sap://hostname:port/instancenumber
+ValidationQuery=SELECT 1 FROM DUMMY
+ConnectionPoolSize=5
+
+[PostgreSQL]
+DriverPath=./jdbc_drivers/PostreSQL/postgresql-9.3-1102.jdbc3.jar
+ClassName=org.postgresql.Driver
+ConnectStringPattern=jdbc:postgresql://hostname:port/databasename
+ValidationQuery=SELECT 1
+ConnectionPoolSize=5
+
+[MySQL]
+DriverPath=./jdbc_drivers/MySQL/mysql-connector-java-5.1.35-bin.jar
+ClassName=com.mysql.jdbc.Driver
+ConnectStringPattern=jdbc:mysql://hostname:port/databasename?zeroDateTimeBehavior=convertToNull
+ValidationQuery=SELECT 1
+ConnectionPoolSize=5
+
+[Neo4J]
+DriverPath=./jdbc_drivers/Neo4J/neo4j-jdbc-2.2-SNAPSHOT-jar-with-dependencies.jar
+ClassName=org.neo4j.jdbc.Driver
+ConnectStringPattern=jdbc:neo4j://hostname:port/
+ValidationQuery=RETURN COUNT(1)
+ConnectionPoolSize=1
+
+[Composite]
+DriverPath=./jdbc_drivers/Composite/csjdbc.jar
+ClassName=cs.jdbc.driver.CompositeDriver
+ConnectStringPattern=jdbc:compositesw:dbapi@hostname:port?domain=compositedomain&dataSource=dataSourceName
+ValidationQuery=
+ConnectionPoolSize=1
+
+[Cassandra]
+DriverPath=./jdbc_drivers/Cassandra/cassandra_driver.jar
+ClassName=org.apache.cassandra.cql.jdbc.CassandraDriver
+ConnectStringPattern=jdbc:cassandra://host1--host2--host3:9160/keyspace1
+ValidationQuery=
+ConnectionPoolSize=1
+
+[Teradata]
+DriverPath=./jdbc_drivers/Teradata/terajdbc4.jar
+ClassName=com.teradata.jdbc.TeraDriver
+ConnectStringPattern=jdbc:teradata://host:port/database=dbname
+ValidationQuery=
+ConnectionPoolSize=5
+
+[CSV]
+DriverPath=./jdbc_drivers/CSV/csvjdbc-1.0-29.jar
+ClassName=org.relique.jdbc.csv.CsvDriver
+ConnectStringPattern=jdbc:relique:csv:/local/path/to/file/file.csv
+ValidationQuery=
+ConnectionPoolSize=1
+
+[Apache Drill]
+DriverPath=./jdbc_drivers/Apache Drill/drill-jdbc-all-1.6.0.jar
+ClassName=org.apache.drill.jdbc.Driver
+ConnectStringPattern=jdbc:drill:zk=host:5181
+ValidationQuery=
+ConnectionPoolSize=1
+
+[Apache Hive]
+DriverPath=./jdbc_drivers/Apache Hive/HiveJDBC3.jar
+ClassName=com.cloudera.hive.jdbc3.HS1Driver
+ConnectStringPattern=jdbc:hive://host:port
+ValidationQuery=
+ConnectionPoolSize=1
+
+[Apache Hive2]
+DriverPath=./jdbc_drivers/Apache Hive/HiveJDBC3.jar
+ClassName=com.cloudera.hive.jdbc3.HS2Driver
+ConnectStringPattern=jdbc:hive2://host:port
+ValidationQuery=
+ConnectionPoolSize=1
+
+[Excel]
+DriverPath=./jdbc_drivers/Excel/ExcelJDBC.jar
+ClassName=org.nicsoft.jdbc.ExcelDriver
+ConnectStringPattern=jdbc:excel://
+ValidationQuery=
+ConnectionPoolSize=1

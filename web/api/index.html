@@ -1,0 +1,110 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=11" />
+		
+		<title>FastBase API Listing</title>
+		<link rel="stylesheet" type="text/css" href="/web/css/styles.css">
+		<script type="text/javascript" src="/web/js/utils.js"></script>
+		<script type="text/javascript">
+			
+			function isAssociativeArray(object) {
+				return (object != null && !Array.isArray(object) && object.length == undefined);
+			}
+			
+			function listApi(json) {
+				var html = [];
+				_listApi(json, html);
+				return html.join('');
+			}
+			
+			function _listApi(json, html) {
+				
+				if(Array.isArray(json)) {
+					
+					html.push('<ul style="list-style-type: none;">');
+					
+					for(var idx in json) {
+						
+						if(json[idx].endpoint != undefined) {
+							
+							html.push('<li><h4>' + json[idx].endpoint + '</h4></li>');
+							
+							delete json[idx]['endpoint'];
+							
+						} else if(json[idx].name != undefined) {
+							
+							html.push('<li>' + json[idx].name + '</li>');
+							
+							delete json[idx]['name'];
+							
+						}
+						
+						_listApi(json[idx], html);
+						
+					}
+					
+					html.push('</ul>');
+					
+				} else if(isAssociativeArray(json)) {
+					
+					html.push('<ul style="list-style-type: none;">');
+					
+					for(var key in json) {
+						
+						if(Array.isArray(json[key]) || isAssociativeArray(json[key])) {
+							
+							html.push('<li><u>' + key + '</u></li>');
+							
+							_listApi(json[key], html);
+							
+						} else {
+							
+							html.push('<li><u>' + key + '</u>: ' + json[key] + '</li>');
+							
+						}
+						
+					}
+					
+					html.push('</ul>');
+					
+				} else {
+					
+					html.push('<li>' + json + '</li>');
+					
+				}
+				
+			}
+			
+			function init() {
+				
+				var xhr = new XMLHttpRequest();
+				xhr.open("GET", '/api', true);
+				
+				xhr.onload = function (evt) {
+					if (xhr.readyState === 4) {
+						if (xhr.status === 200) {
+							
+							var json = JSON.parse(xhr.responseText);
+							
+							e('apiListing').innerHTML = listApi(json);
+							
+							
+						} else {
+							console.error(xhr.statusText);
+						}
+					}
+				};
+				xhr.onerror = function (evt) {
+					console.error(xhr.statusText);
+				};
+				xhr.send(null);
+				
+			}
+			
+		</script>
+	</head>
+	<body onload="init();">
+		<div id="apiListing"></div>
+	</body>
+</html>

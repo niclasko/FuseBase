@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+		<meta name="description" content="FastBase login">
+		<meta name="author" content="Niclas Kjäll-Ohlsson">
+
+		<title>FastBase Login</title>
+		
+		<link rel="stylesheet" type="text/css" href="/web/css/styles.css">
+		<link rel="stylesheet" type="text/css" href="/web/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="/web/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" type="text/css" href="/web/css/login.css">
+		
+		<script type="text/javascript" src="/web/js/utils.js"></script>
+		<script type="text/javascript" src="/web/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/web/js/bootstrap.min.js"></script>
+		
+		<script type="text/javascript">
+		
+			function getHostName() {
+				
+				var href = window.location.href;
+				var start = href.indexOf(':')+3,
+					end = Math.max(
+							href.substr(href.indexOf(':')+3).indexOf('/'),
+							href.substr(href.indexOf(':')+3).indexOf(':')
+						);
+						
+				if(end == -1) {
+					return href.substr(start);
+				}
+				
+				return href.substr(start, end);
+			}
+		
+			function eraseFastBaseSK() {
+				document.cookie =
+					"fastbase_sk=not_valid; Path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=" + getHostName();
+				}
+			
+			function FastBaseLogin() {
+				
+				var xhr = new XMLHttpRequest();
+				
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+						var json = JSON.parse(xhr.responseText);
+						
+						if(json.data.status == 'success') {
+							
+							window.location = "/ui/";
+							
+						} else if(json.data.status == 'failure') {
+							
+							e('feedback').innerHTML = json.data.message;
+							
+						}
+					}
+				};
+				
+				xhr.open(
+					"GET",
+					"/user/authenticate?h=" +
+						window.btoa(e('username').value + ':' + e('password').value) +
+						"&sessionExpiryTimeInMs=" + (e('rememberuser').checked ? "-1" : "3600000") +
+						"&hostName=" + encodeURIComponent(window.location.hostname),
+					true
+				);
+				xhr.send();
+				
+			}
+			
+		</script>
+
+	</head>
+	<body onload="eraseFastBaseSK();">
+		<div class="container">
+			
+			<div class="row">
+				
+				<div class="form-signin">
+					<h2 class="form-signin-heading">FastBase Login</h2>
+					<label for="username" class="sr-only">Username</label>
+					<input type="username" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+					<label for="password" class="sr-only">Password</label>
+					<input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="rememberuser">Remember me&nbsp;&nbsp;&nbsp;
+							<span id="feedback" style="font-size: x-small; font-weight: bold; color: red;"></span>
+						</label>
+					</div>
+					<button class="btn btn-lg btn-primary btn-block" onclick="FastBaseLogin();">Login</button>
+				</div>
+				
+			</div>
+
+		</div>
+	</body>
+</html>

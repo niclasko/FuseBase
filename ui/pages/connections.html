@@ -1,0 +1,63 @@
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#connectionModal" ng-click="fastBaseClient.connections.new();">New Connection...</button>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</td>
+			<th>Connection String</th>
+			<th>User</td>
+			<th>Connected</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="c in fastBaseClient.connections.data">
+			<td>{{ c.connectionName }}</td>
+			<td>{{ c.connectString }}</td>
+			<td>{{ c.user }}</td>
+			<td>{{ (c.isConnected ? 'Yes' : 'No') }}</td>
+			<td>
+				<button ng-click="fastBaseClient.connections.connect($event, c.connectionName);">{{ (c.isConnected ? 'Reconnect' : 'Connect') }}</button>
+				<button ng-click="fastBaseClient.connections.edit(c);" data-target="#connectionModal" data-toggle="modal">Edit</button>
+				<button ng-click="fastBaseClient.connections.delete(c.connectionName);">Delete</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<!-- Dialog for new event definitions -->
+<div id="connectionModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Connection</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="text">Driver</label>
+					<select class="form-control"
+							ng-model="fastBaseClient.connections.current.jdbcDriverInfoName"
+							ng-disabled="!fastBaseClient.connections.current.isNew"
+							ng-options="d.name as d.name for d in fastBaseClient.connections.jdbcDrivers"
+							ng-change="fastBaseClient.connections.setDerivedFields();">
+						<option value="" selected disabled>
+							{{ fastBaseClient.connections.jdbcDriversDefaultChoice }}
+						</option>
+					</select>
+					<label for="text">Name</label>
+					<input type="text" class="form-control" ng-model="fastBaseClient.connections.current.connectionName" ng-disabled="!fastBaseClient.connections.current.isNew">
+					<label for="text">Connection String</label>
+					<input type="text" class="form-control" ng-model="fastBaseClient.connections.current.connectString">
+					<label for="text">User</label>
+					<input type="text" class="form-control" ng-model="fastBaseClient.connections.current.user">
+					<label for="text">Password</label>
+					<input type="password" class="form-control" ng-model="fastBaseClient.connections.current.passWord">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" ng-click="fastBaseClient.connections.saveCurrent();">Save</button>
+			</div>
+		</div>
+	</div>
+</div>

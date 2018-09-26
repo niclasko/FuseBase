@@ -1,0 +1,212 @@
+<div class="row">
+	
+	<div class="col-sm-8">
+		
+		<div class="form-group">
+			<textarea placeholder="Please enter Javascript source code..." class="form-control" onkeydown="processSourceCodeInput(event, this);" ng-model="fastBaseClient.scripts.current.source" rows="11" style="resize: none; margin-bottom: 5px; height: 250px;"></textarea>
+			<div class="form-inline">
+				<button class="btn btn-default" ng-click="fastBaseClient.scripts.runAnonymous(fastBaseClient.scripts.current);" style="margin-right: 5px;">Run</button>
+				<button class="btn btn-default" ng-click="fastBaseClient.scripts.current = {};">Clear</button>
+				<button class="btn btn-default pull-right" data-toggle="modal" data-target="#registerScriptModal" ng-click="fastBaseClient.scripts.new = angular.copy(fastBaseClient.scripts.current);">Register...</button>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="col-sm-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">Registered Scripts</div>
+			<div class="panel-body" style="height: 247px; overflow-y: auto;">
+				<span>{{ (fastBaseClient.scripts.data.length == 0 ? 'No registered scripts.' : '') }}</span>
+				<table class="table" ng-hide="(fastBaseClient.scripts.data.length == 0)">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="s in fastBaseClient.scripts.data">
+							<td>{{ s.name }}</td>
+							<td>
+								<button ng-click="fastBaseClient.scripts.run(s);">Run</button>
+								<button data-toggle="modal" data-target="#editScriptModal" ng-click="fastBaseClient.scripts.getSource(s); fastBaseClient.scripts.edited = s;">Edit...</button>
+								<button ng-click="fastBaseClient.scripts.delete(s);">Delete</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+	
+</div>
+
+<div class="row">
+	
+	<div class="col-sm-8">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				{{ fastBaseClient.scripts.scriptOutput }}
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-sm-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Scheduled Jobs
+				<button ng-click="fastBaseClient.scheduler.newJob = {};" data-toggle="modal" data-target="#registerScheduledJobModal">New...</button>
+				<button ng-click="fastBaseClient.scheduler.list();">Refresh below list</button>
+			</div>
+			<div class="panel-body" style="height: 247px; overflow-y: auto;">
+				<span>{{ (fastBaseClient.scheduler.data.length == 0 ? 'No scheduled jobs.' : '') }}</span>
+				<table class="table" ng-hide="(fastBaseClient.scheduler.data.length == 0)">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Runs</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="sj in fastBaseClient.scheduler.data">
+							<td>{{ sj.name }}</td>
+							<td>{{ sj.executionCount }}</td>
+							<td>
+								<button ng-click="fastBaseClient.scheduler.start(sj);" ng-disabled="sj.isScheduled;">Start</button>
+								<button ng-click="fastBaseClient.scheduler.delete(sj);">Delete</button>
+								<button ng-click="fastBaseClient.scheduler.viewLogs(sj);" data-toggle="modal" data-target="#viewLogsModal">Logs...</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+	
+</div>
+
+<div id="registerScriptModal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Register Script</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="text">Name</label>
+					<input type="text" class="form-control" ng-model="fastBaseClient.scripts.new.name">
+					<label for="text">Source</label>
+					<textarea placeholder="Please enter Javascript source code..." class="form-control" style="resize: none;" rows="7" ng-model="fastBaseClient.scripts.new.source"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" ng-click="fastBaseClient.scripts.save(fastBaseClient.scripts.new);">Register</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="editScriptModal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Edit Script <b>{{ fastBaseClient.scripts.edited.name }}</b></h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="text">Source</label>
+					<textarea placeholder="Please enter Javascript source code..." class="form-control" style="resize: none;" rows="7" ng-model="fastBaseClient.scripts.edited.source"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" ng-click="fastBaseClient.scripts.save(fastBaseClient.scripts.edited);">Register</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="registerScheduledJobModal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Register Scheduled Job</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="text">Name</label>
+					<input type="text" class="form-control" ng-model="fastBaseClient.scheduler.newJob.name">
+					<label for="text">Script</label>
+					<select class="form-control"
+							ng-model="fastBaseClient.scheduler.newJob.scriptName"
+							ng-options="s.name as s.name for s in fastBaseClient.scripts.data">
+						<option value="" selected disabled>
+							{{ "Please select a script..." }}
+						</option>
+					</select>
+					<label for="text">Job time interval unit</label>
+					<select class="form-control"
+							ng-model="fastBaseClient.scheduler.newJob.timeUnit"
+							ng-options="tu as tu for tu in fastBaseClient.scheduler.timeUnits">
+						<option value="" selected disabled>
+							{{ "Please select time unit..." }}
+						</option>
+					</select>
+					<label for="text">Initial time interval delay before first job execution</label>
+					<input type="text" class="form-control" ng-model="fastBaseClient.scheduler.newJob.initialDelay">
+					<label for="text">Time interval between successive job executions</label>
+					<input type="text" class="form-control" ng-model="fastBaseClient.scheduler.newJob.period">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary"
+					ng-click="fastBaseClient.scheduler.saveJob(fastBaseClient.scheduler.newJob);"
+					ng-disabled="fastBaseClient.scheduler.isJobInvalid(fastBaseClient.scheduler.newJob);">Register</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="viewLogsModal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Logs for scheduled job <b>{{ fastBaseClient.scheduler.currentJob.name }}</b></h4>
+			</div>
+			<div class="modal-body">
+				
+				<div class="panel panel-default">
+					<div class="panel-body" style="height: 247px; overflow-y: auto;">
+						<table class="table">
+							<tbody>
+								<tr ng-repeat="logEntry in fastBaseClient.scheduler.currentJob.logEntries">
+									<td><a href="javascript:void(null)" ng-click="fastBaseClient.scheduler.getLogFile(fastBaseClient.scheduler.currentJob, logEntry);">{{ logEntry.fileName }}</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				
+				<div class="panel panel-default">
+					<div class="panel-body">
+						{{ fastBaseClient.scheduler.logFileContents }}
+					</div>
+				</div>
+				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,7 +1,7 @@
 # FuseBase
 Data Convergence Engine
 
-FuseBase is a data convergence server for JDBC-enabled data sources. For inquiries reach out to Niclas Kjäll-Ohlsson (niclasko@gmail.com) or Bjørnar Fjøren (bjornar.fjoren@gmail.com).
+FuseBase is a data convergence server for JDBC-enabled data sources. For inquiries reach out to Niclas Kjäll-Ohlsson (niclas@fusebase.io) or Bjørnar Fjøren (bjornar@fusebase.io).
 
 FuseBase offers the following capabilities:
 * JDBC connections via drop-in drivers for any JDBC data source.

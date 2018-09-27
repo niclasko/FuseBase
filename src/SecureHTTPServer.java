@@ -24,7 +24,7 @@ import javax.net.ssl.SSLServerSocketFactory;
 
 /*
 ** Generate certificate:
-**	keytool -genkey -alias alias -keypass fastbase -keystore fastbase.keystore -storepass fastbase -keyalg RSA
+**	keytool -genkey -alias alias -keypass fusebase -keystore fusebase.keystore -storepass fusebase -keyalg RSA
 */
 
 public class SecureHTTPServer extends HTTPServer {

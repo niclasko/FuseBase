@@ -266,10 +266,10 @@ function BrowserUpload() {
 		
 	};
 	
-	this.writeToFastBase = function(parameters, fileData, progress) {
+	this.writeToFuseBase = function(parameters, fileData, progress) {
 		var xhr = new XMLHttpRequest();
 		
-		xhr.open("POST","/fastbase/loadfilefromclient" + parameters, false);
+		xhr.open("POST","/fusebase/loadfilefromclient" + parameters, false);
 		xhr.setRequestHeader("Connection","close");
 
 		xhr.send(fileData);
@@ -279,7 +279,7 @@ function BrowserUpload() {
 			var json = JSON.parse(xhr.responseText);
 			
 			postMessage({
-				"reply": "fastBaseLoadProgress",
+				"reply": "fuseBaseLoadProgress",
 				"loadProgress": progress,
 				"recordCount":  json.data[0]['recordCount']
 			});
@@ -375,7 +375,7 @@ function BrowserUpload() {
 					dataChunk = blob;
 				}
 				
-				this.writeToFastBase(parameters, dataChunk, ((start/file.size)*100).toFixed(1));
+				this.writeToFuseBase(parameters, dataChunk, ((start/file.size)*100).toFixed(1));
 
 				start = stop + 1;
 				if(stop == file.size) {
@@ -390,6 +390,6 @@ function BrowserUpload() {
 			postMessage({"reply": "feedback", "message": 'Error: ' + err.message});
 		}
 		
-		this.writeToFastBase(parameters, '__CLOSEFILE__', ((start/file.size)*100).toFixed(1));
+		this.writeToFuseBase(parameters, '__CLOSEFILE__', ((start/file.size)*100).toFixed(1));
 	}
 }

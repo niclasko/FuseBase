@@ -58,7 +58,7 @@ body, textarea, input, select, table, form, pre {
 	padding: 3px;
 }
 
-.fastbase_table_link {
+.fusebase_table_link {
 	color: DimGray;
 	font-family: Verdana, Sans-serif;
 	font-size: x-small;
@@ -130,7 +130,7 @@ body, textarea, input, select, table, form, pre {
 	padding-top: 3px;
 }
 
-#fastBaseQueryInput {
+#fuseBaseQueryInput {
 	width: 100%;
 	height: 200px;
 	-webkit-border-radius: 5px;

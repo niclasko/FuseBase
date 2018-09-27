@@ -873,7 +873,7 @@ public class SQLParser {
 			
 			if(this.literal()) {
 
-				this.consume(); // The FastBase connection query
+				this.consume(); // The FuseBase connection query
 
 				if(this.comma()) {
 
@@ -881,7 +881,7 @@ public class SQLParser {
 
 					if(this.literal()) {
 
-						this.consume(); // The FastBase connection name
+						this.consume(); // The FuseBase connection name
 
 					}
 					
@@ -898,13 +898,13 @@ public class SQLParser {
 
 				} else {
 					
-					this.error("Expected FastBase connection name.");
+					this.error("Expected FuseBase connection name.");
 					
 				}
 
 			} else {
 				
-				this.error("Expected single- or double-quoted query for a FastBase connection.");
+				this.error("Expected single- or double-quoted query for a FuseBase connection.");
 				
 			}
 			

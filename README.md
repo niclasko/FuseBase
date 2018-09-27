@@ -1,9 +1,9 @@
-# FastBase
+# FuseBase
 Data Convergence Engine
 
-FastBase is a data convergence server for JDBC-enabled data sources. For inquiries reach out to Niclas Kjäll-Ohlsson (niclasko@gmail.com) or Bjørnar Fjøren (bjornar.fjoren@gmail.com).
+FuseBase is a data convergence server for JDBC-enabled data sources. For inquiries reach out to Niclas Kjäll-Ohlsson (niclasko@gmail.com) or Bjørnar Fjøren (bjornar.fjoren@gmail.com).
 
-FastBase offers the following capabilities:
+FuseBase offers the following capabilities:
 * JDBC connections via drop-in drivers for any JDBC data source.
 * Javascript engine to run scripts server-side
 * SQL parser
@@ -16,7 +16,7 @@ FastBase offers the following capabilities:
 
 Quick start:
 ```Shell
-$ java -jar fastbase.jar [-port=4444]
+$ java -jar fusebase.jar [-port=4444]
 ```
 Then
 * **Config** - Point your browser to [http://localhost:4444](http://localhost:4444) (user/pass: admin/peregrine)
@@ -29,7 +29,7 @@ Then
     ```
     var query = "select * from bigtable";
     var outputFilePath = "/data/out.csv";
-    FastBase.queryToFile(CONNECTION_NAME, query, outputFilePath, CSV);
+    FuseBase.queryToFile(CONNECTION_NAME, query, outputFilePath, CSV);
     output.writeBytes("Done");
     ```
 
@@ -43,7 +43,7 @@ Then
     ```curl http://localhost:4444/clientkey/authenticate?clientKey=YOUR_GENERATED_CLIENT_KEY&outputType=JSON```
 6. Copy sessionKey and use it in API call (next step)
     
-    ```curl http://localhost:4444/sql/parse?sql=select%20*%20from%20dual%20a%20inner%20join%20dual%20b%20on%20(1%3D1)&fastbase_sk=YOUR_SESSION_KEY_FROM_PREVIOUS_STEP```
+    ```curl http://localhost:4444/sql/parse?sql=select%20*%20from%20dual%20a%20inner%20join%20dual%20b%20on%20(1%3D1)&fusebase_sk=YOUR_SESSION_KEY_FROM_PREVIOUS_STEP```
 6. Output
     ```
     SQL Parse tree:
@@ -69,8 +69,8 @@ Then
     {"KEYWORD": "ROOT","children": [{"KEYWORD": "SELECT","TYPE": "CLAUSE","TOKEN": "select","children": [{"KEYWORD": "MULTIPLY","TYPE": "BINARY_OPERATOR","TOKEN": "*"}]},{"KEYWORD": "FROM","TYPE": "CLAUSE","TOKEN": "from","children": [{"KEYWORD": "LITERAL","TYPE": "ATOM","TOKEN": "dual"},{"KEYWORD": "LITERAL","TYPE": "ATOM","TOKEN": "a"},{"KEYWORD": "INNER_JOIN","TYPE": "JOIN","TOKEN": "inner join"},{"KEYWORD": "LITERAL","TYPE": "ATOM","TOKEN": "dual"},{"KEYWORD": "LITERAL","TYPE": "ATOM","TOKEN": "b"},{"KEYWORD": "ON","TYPE": "JOIN_FILTER","TOKEN": "on"},{"KEYWORD": "BEGIN_PARANTHESES","TYPE": "PARANTHESES","TOKEN": "("},{"KEYWORD": "NUMBER_ATOM","TYPE": "ATOM","TOKEN": "1"},{"KEYWORD": "EQUALS","TYPE": "BINARY_OPERATOR","TOKEN": "="},{"KEYWORD": "NUMBER_ATOM","TYPE": "ATOM","TOKEN": "1"},{"KEYWORD": "END_PARANTHESES","TYPE": "PARANTHESES","TOKEN": ")"}]}]}
     ```
 **Add JDBC driver**
-1. Stop FastBase if running
-2. Copy JDBC driver to jdbc_drivers directory under runtime directory (directory where fastbase.jar is located)
+1. Stop FuseBase if running
+2. Copy JDBC driver to jdbc_drivers directory under runtime directory (directory where fusebase.jar is located)
 3. Add entry for JDBC driver in ./jdbc_drivers/JDBCDrivers.txt. For example:
     ```
     [Oracle]
@@ -80,4 +80,4 @@ Then
     ValidationQuery=SELECT 1 FROM DUAL
     ConnectionPoolSize=5
     ```
-4. Start FastBase and use JDBC driver
+4. Start FuseBase and use JDBC driver

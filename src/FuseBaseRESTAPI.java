@@ -35,7 +35,7 @@ import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
 /*
-** FastBase ReST API:
+** FuseBase ReST API:
 ** 	Call api() method to list API
 ** 	http://hostname:port/api will list api endpoints and parameters as JSON
 **
@@ -43,11 +43,11 @@ import java.util.NoSuchElementException;
 **		http://localhost:4444/scheduler/jobs/create?name=testjob&scriptName=test&initialDelay=0&period=10&timeUnit=SECONDS
 */
 
-public class FastBaseRESTAPI {
+public class FuseBaseRESTAPI {
 	
-	private FastBase fastBase;
+	private FuseBase FuseBase;
 	private URLDecoder ud;
-	private HashMap<String, FastBaseRESTAPIMethod> httpEndpointMethods;
+	private HashMap<String, FuseBaseRESTAPIMethod> httpEndpointMethods;
 	private JSONBuilderDynamic apiMethodDescriptor;
 	
 	private JSONBuilder apiEndpointsJSONBuilder;
@@ -76,15 +76,15 @@ public class FastBaseRESTAPI {
 	
 	/* END Annotation definitions for ReST API */
 	
-	public FastBaseRESTAPI(FastBase fastBase) throws Exception {
+	public FuseBaseRESTAPI(FuseBase FuseBase) throws Exception {
 		
-		this.fastBase = fastBase;
+		this.FuseBase = FuseBase;
 		
 		this.ud =
 			new URLDecoder();
 			
 		this.httpEndpointMethods =
-			new HashMap<String, FastBaseRESTAPIMethod>();
+			new HashMap<String, FuseBaseRESTAPIMethod>();
 			
 		this.init();
 		
@@ -173,7 +173,7 @@ public class FastBaseRESTAPI {
 				// Register endpoint for routing
 				this.httpEndpointMethods.put(
 					apiPath,
-					new FastBaseRESTAPIMethod(
+					new FuseBaseRESTAPIMethod(
 						apiPath,
 						method,
 						requiresAuthentication
@@ -210,7 +210,7 @@ public class FastBaseRESTAPI {
 				
 				for(int i=0; i<parameterTypes.length; i++) {
 					
-					if(parameterTypes[i].getSimpleName().equals(FastBaseRESTAPICall.class.getSimpleName())) {
+					if(parameterTypes[i].getSimpleName().equals(FuseBaseRESTAPICall.class.getSimpleName())) {
 						continue;
 					}
 					
@@ -269,7 +269,7 @@ public class FastBaseRESTAPI {
 									apiMethodDescriptor.k(
 										"valid_values"
 									).v(
-										this.fastBase.dbConnectionManager
+										this.FuseBase.dbConnectionManager
 									);
 									
 								} else if(validValuesClass.equals("ScriptManager")) {
@@ -277,7 +277,7 @@ public class FastBaseRESTAPI {
 									apiMethodDescriptor.k(
 										"valid_values"
 									).v(
-										this.fastBase.scriptManager
+										this.FuseBase.scriptManager
 									);
 									
 								} else if(validValuesClass.equals("QueryManager")) {
@@ -285,7 +285,7 @@ public class FastBaseRESTAPI {
 									apiMethodDescriptor.k(
 										"valid_values"
 									).v(
-										this.fastBase.queryManager
+										this.FuseBase.queryManager
 									);
 									
 								} else if(validValuesClass.equals("Scheduler")) {
@@ -293,7 +293,7 @@ public class FastBaseRESTAPI {
 									apiMethodDescriptor.k(
 										"valid_values"
 									).v(
-										this.fastBase.scheduler()
+										this.FuseBase.scheduler()
 									);
 									
 								}
@@ -337,25 +337,25 @@ public class FastBaseRESTAPI {
 		
 		// Set API endpoints JSONBuilder to be used for listing possible api privileges
 		
-		FastBaseRESTAPIMethod[] fastBaseRESTAPIMethods =
-			this.httpEndpointMethods.values().toArray(new FastBaseRESTAPIMethod[0]);
+		FuseBaseRESTAPIMethod[] FuseBaseRESTAPIMethods =
+			this.httpEndpointMethods.values().toArray(new FuseBaseRESTAPIMethod[0]);
 			
-		Arrays.sort(fastBaseRESTAPIMethods);
+		Arrays.sort(FuseBaseRESTAPIMethods);
 		
 		this.apiEndpointsJSONBuilder = JSONBuilder.f();
 		
 		this.apiEndpointsJSONBuilder.$('[');
 		
-		for(FastBaseRESTAPIMethod fastBaseRESTAPIMethod : fastBaseRESTAPIMethods) {
+		for(FuseBaseRESTAPIMethod FuseBaseRESTAPIMethod : FuseBaseRESTAPIMethods) {
 			
-			if(!fastBaseRESTAPIMethod.requiresAuthentication()) {
+			if(!FuseBaseRESTAPIMethod.requiresAuthentication()) {
 				
 				continue;
 				
 			}
 			
 			this.apiEndpointsJSONBuilder.v(
-				fastBaseRESTAPIMethod.apiPath()
+				FuseBaseRESTAPIMethod.apiPath()
 			);
 			
 		}
@@ -383,16 +383,16 @@ public class FastBaseRESTAPI {
 				(httpRequest != null ? httpRequest.parameter("callback") : "")
 			);
 		
-		FastBaseRESTAPIMethod fastBaseRESTAPIMethod =
+		FuseBaseRESTAPIMethod FuseBaseRESTAPIMethod =
 			this.httpEndpointMethods.get(
 				aPIPath
 			);
 		
-		if(fastBaseRESTAPIMethod != null) {
+		if(FuseBaseRESTAPIMethod != null) {
 			
 			Object[] methodParameters =
 				new Object[]{
-					new FastBaseRESTAPICall(
+					new FuseBaseRESTAPICall(
 						jsonCallbackFunction,
 						output,
 						httpRequest,
@@ -400,7 +400,7 @@ public class FastBaseRESTAPI {
 					)
 				};
 			
-			if(fastBaseRESTAPIMethod.requiresAuthentication()) {
+			if(FuseBaseRESTAPIMethod.requiresAuthentication()) {
 				
 				String sessionKey =
 					this.getSessionKey(
@@ -409,9 +409,9 @@ public class FastBaseRESTAPI {
 				
 				if(this.isAuthenticated(sessionKey, httpServerThread)) {
 					
-					if(this.isAuthorized(sessionKey, fastBaseRESTAPIMethod.apiPath())) {
+					if(this.isAuthorized(sessionKey, FuseBaseRESTAPIMethod.apiPath())) {
 						
-						fastBaseRESTAPIMethod.method().invoke(
+						FuseBaseRESTAPIMethod.method().invoke(
 							this,
 							methodParameters
 						);
@@ -438,7 +438,7 @@ public class FastBaseRESTAPI {
 				
 			} else {
 				
-				fastBaseRESTAPIMethod.method().invoke(
+				FuseBaseRESTAPIMethod.method().invoke(
 					this,
 					methodParameters
 				);
@@ -462,12 +462,12 @@ public class FastBaseRESTAPI {
 		}
 		
 		String sessionKey =
-			httpRequest.parameter(Config.FASTBASE_SESSION_KEY_COOKIE_KEYNAME);
+			httpRequest.parameter(Config.FUSEBASE_SESSION_KEY_COOKIE_KEYNAME);
 			
 		if(sessionKey == null) {
 			
 			sessionKey =
-				httpRequest.cookie(Config.FASTBASE_SESSION_KEY_PARAMETER_KEYNAME);
+				httpRequest.cookie(Config.FUSEBASE_SESSION_KEY_PARAMETER_KEYNAME);
 			
 		}
 		
@@ -479,7 +479,7 @@ public class FastBaseRESTAPI {
 		
 		if(sessionKey != null) {
 			
-			if(fastBase.userManager.isValidSession(sessionKey, httpServerThread.getClientIPAddress())) {
+			if(FuseBase.userManager.isValidSession(sessionKey, httpServerThread.getClientIPAddress())) {
 				
 				return true;
 				
@@ -508,7 +508,7 @@ public class FastBaseRESTAPI {
 		if(sessionKey != null) {
 			
 			UserSession userSession =
-				fastBase.userManager.getUserSession(sessionKey);
+				FuseBase.userManager.getUserSession(sessionKey);
 			
 			if(userSession != null) {
 				
@@ -526,18 +526,18 @@ public class FastBaseRESTAPI {
 		
 	}
 	
-	private String getFastBaseCookie(String sessionKey, String hostName) {
+	private String getFuseBaseCookie(String sessionKey, String hostName) {
 		
 		return
-			Config.FASTBASE_SESSION_KEY_COOKIE_KEYNAME + "=" + sessionKey +
+			Config.FUSEBASE_SESSION_KEY_COOKIE_KEYNAME + "=" + sessionKey +
 			"; Path=/; domain=" + hostName;
 		
 	}
 	
-	public String getFastBaseCookieForRemoval(String hostName) {
+	public String getFuseBaseCookieForRemoval(String hostName) {
 		
 		return
-			Config.FASTBASE_SESSION_KEY_COOKIE_KEYNAME + 
+			Config.FUSEBASE_SESSION_KEY_COOKIE_KEYNAME + 
 			"=not_valid; Path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=" + 
 			hostName;
 		
@@ -548,7 +548,7 @@ public class FastBaseRESTAPI {
 	*/
 	
 	@HTTP_ENDPOINT
-	public void json_parse(FastBaseRESTAPICall c) throws Exception {
+	public void json_parse(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.json_parse(
 			this.replaceURL(c.httpRequest().parameter("unparsedjson")),
@@ -563,7 +563,7 @@ public class FastBaseRESTAPI {
 								String unparsedJson,
 								@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 							) throws Exception {
 		
@@ -591,7 +591,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void sql_parse(FastBaseRESTAPICall c) throws Exception {
+	public void sql_parse(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.sql_parse(
 			this.replaceURL(c.httpRequest().parameter("sql")),
@@ -606,7 +606,7 @@ public class FastBaseRESTAPI {
 								String sql,
 								@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 							) throws Exception {
 		
@@ -633,7 +633,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT(requiresAuthentication=false)
-	public void clientkey_authenticate(FastBaseRESTAPICall c) throws Exception {
+	public void clientkey_authenticate(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.clientkey_authenticate(
 			this.replaceURL(c.httpRequest().parameter("clientKey")),
@@ -658,12 +658,12 @@ public class FastBaseRESTAPI {
 										long sessionExpiryTimeInMs,
 										@Parameter(name="outputType", required=false)
 										OutputType outputType,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 					
 									) throws Exception {
 		
 		String sessionKey =
-			this.fastBase.userManager.authenticateClientKey(
+			this.FuseBase.userManager.authenticateClientKey(
 				clientKey,
 				c.httpServerThread().getClientIPAddress(),
 				sessionExpiryTimeInMs
@@ -725,7 +725,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT(requiresAuthentication=false)
-	public void user_authenticate(FastBaseRESTAPICall c) throws Exception {
+	public void user_authenticate(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_authenticate(
 			this.replaceURL(c.httpRequest().parameter("h")),
@@ -747,13 +747,13 @@ public class FastBaseRESTAPI {
 									long sessionExpiryTimeInMs,
 									@Parameter(name="hostname")
 									String hostName,
-									FastBaseRESTAPICall c
+									FuseBaseRESTAPICall c
 					
 								) throws Exception {
 		try {
 			
 			String sessionKey =
-				this.fastBase.userManager.authenticateUser(
+				this.FuseBase.userManager.authenticateUser(
 					base64EncodedUsernameAndPassword,
 					c.httpServerThread().getClientIPAddress(),
 					sessionExpiryTimeInMs
@@ -767,7 +767,7 @@ public class FastBaseRESTAPI {
 					c.output(),
 					JSONBuilder.f().$('{').k("status").v("success").$('}'),
 					c.jsonCallbackFunction(),
-					this.getFastBaseCookie(sessionKey, hostName)
+					this.getFuseBaseCookie(sessionKey, hostName)
 				);
 
 			} else if(sessionKey == null) {
@@ -793,7 +793,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT(requiresAuthentication=false)
-	public void user_logout(FastBaseRESTAPICall c) throws Exception {
+	public void user_logout(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_logout(c.jsonCallbackFunction(), c);
 		
@@ -801,25 +801,25 @@ public class FastBaseRESTAPI {
 	
 	@API(type=HttpRequestType.GET, requiresAuthentication=false)
 	public void user_logout(	@Parameter(name="jsonCallbackFunction", required=false) String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 							) throws Exception {
 		
 		String sessionKey =
 			this.getSessionKey(c.httpRequest());
 			
-		this.fastBase.userManager.deleteUserSession(sessionKey);
+		this.FuseBase.userManager.deleteUserSession(sessionKey);
 			
 		HttpResponse.redirect(
 			c.output(),
-			Config.FASTBASE_WEB_LOGIN_PATH,
-			this.getFastBaseCookieForRemoval(c.httpServerThread().getClientHostName())
+			Config.FUSEBASE_WEB_LOGIN_PATH,
+			this.getFuseBaseCookieForRemoval(c.httpServerThread().getClientHostName())
 		);
 		
 	}
 	
 	@HTTP_ENDPOINT(requiresAuthentication=false)
-	public void user_current(FastBaseRESTAPICall c) throws Exception {
+	public void user_current(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_current(c.jsonCallbackFunction(), c);
 		
@@ -827,7 +827,7 @@ public class FastBaseRESTAPI {
 	
 	@API(type=HttpRequestType.GET, requiresAuthentication=false)
 	public void user_current(	@Parameter(name="jsonCallbackFunction", required=false) String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 							) throws Exception {
 		
@@ -835,7 +835,7 @@ public class FastBaseRESTAPI {
 			this.getSessionKey(c.httpRequest());
 			
 		UserSession userSession =
-			this.fastBase.userManager.getUserSession(sessionKey);
+			this.FuseBase.userManager.getUserSession(sessionKey);
 			
 		if(userSession != null) {
 			
@@ -861,7 +861,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_add(FastBaseRESTAPICall c) throws Exception {
+	public void user_add(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_add(
 			this.replaceURL(c.httpRequest().parameter("h")),
@@ -882,12 +882,12 @@ public class FastBaseRESTAPI {
 							String privilegeList,
 							@Parameter(name="jsonCallbackFunction", required=false)
 							String jsonCallbackFunction,
-							FastBaseRESTAPICall c
+							FuseBaseRESTAPICall c
 							
 						) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.addUser(
+			this.FuseBase.userManager.addUser(
 				base64EncodedUsernameAndPassword,
 				(roleList == null || roleList.equals("") ? new String[]{} : roleList.split(",")),
 				(privilegeList == null || privilegeList.equals("") ? new String[]{} : privilegeList.split(","))
@@ -914,7 +914,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_delete(FastBaseRESTAPICall c) throws Exception {
+	public void user_delete(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_delete(
 			c.httpRequest().parameter("username"),
@@ -929,12 +929,12 @@ public class FastBaseRESTAPI {
 								String username,
 								@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 							) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.deleteUser(
+			this.FuseBase.userManager.deleteUser(
 				username
 			);
 			
@@ -967,7 +967,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_changepassword(FastBaseRESTAPICall c) throws Exception {
+	public void user_changepassword(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_changepassword(
 			this.replaceURL(c.httpRequest().parameter("h1")),
@@ -985,12 +985,12 @@ public class FastBaseRESTAPI {
 										String base64EncodedUsernameAndNewPassword,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 							
 									) throws Exception {
 		
 		UserManagerFeedback feedback =
-			this.fastBase.userManager.changeUserPassword(
+			this.FuseBase.userManager.changeUserPassword(
 				base64EncodedUsernameAndOldPassword,
 				base64EncodedUsernameAndNewPassword
 			);
@@ -1016,7 +1016,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void api(FastBaseRESTAPICall c) throws Exception {
+	public void api(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.api(c.jsonCallbackFunction(), c);
 		
@@ -1024,7 +1024,7 @@ public class FastBaseRESTAPI {
 	
 	@API(type=HttpRequestType.GET)
 	public void api(	@Parameter(name="jsonCallbackFunction", required=false) String jsonCallbackFunction,
-						FastBaseRESTAPICall c
+						FuseBaseRESTAPICall c
 					
 					) throws Exception {
 		
@@ -1037,7 +1037,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void connections_list(FastBaseRESTAPICall c) throws Exception {
+	public void connections_list(FuseBaseRESTAPICall c) throws Exception {
 													
 		this.connections_list(
 			c.jsonCallbackFunction(),
@@ -1049,20 +1049,20 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void connections_list(	@Parameter(name="jsonCallbackFunction", required=false)
 									String jsonCallbackFunction,
-									FastBaseRESTAPICall c	
+									FuseBaseRESTAPICall c	
 									
 								) throws Exception {
 		
 		this.jsonReply(
 			c.output(),
-			fastBase.dbConnectionManager.getJSONBuilder(),
+			FuseBase.dbConnectionManager.getJSONBuilder(),
 			c.jsonCallbackFunction()
 		);
 		
 	}
 	
 	@HTTP_ENDPOINT
-	public void connections_addorupdate(FastBaseRESTAPICall c) throws Exception {
+	public void connections_addorupdate(FuseBaseRESTAPICall c) throws Exception {
 		
 		String connectionName = replaceURL(c.httpRequest().parameter("connectionName")),
 			connectString = replaceURL(c.httpRequest().parameter("connectString")),
@@ -1099,12 +1099,12 @@ public class FastBaseRESTAPI {
 											String jdbcDriverInfoName,
 											@Parameter(name="jsonCallbackFunction", required=false)
 											String jsonCallbackFunction,
-											FastBaseRESTAPICall c
+											FuseBaseRESTAPICall c
 										
 										) throws Exception {
 		
 		MapAction mapAction =
-			fastBase.dbConnectionManager.addOrUpdateConnection(
+			FuseBase.dbConnectionManager.addOrUpdateConnection(
 				connectionName,
 				connectString,
 				user,
@@ -1134,7 +1134,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void connections_delete(FastBaseRESTAPICall c) throws Exception {
+	public void connections_delete(FuseBaseRESTAPICall c) throws Exception {
 		
 		String connectionName =
 			replaceURL(c.httpRequest().parameter("connectionName"));
@@ -1152,12 +1152,12 @@ public class FastBaseRESTAPI {
 									String connectionName,
 									@Parameter(name="jsonCallbackFunction", required=false)
 									String jsonCallbackFunction,
-									FastBaseRESTAPICall c
+									FuseBaseRESTAPICall c
 								
 									) throws Exception {
 		
 		MapAction mapAction =
-			fastBase.dbConnectionManager.deleteConnection(connectionName);
+			FuseBase.dbConnectionManager.deleteConnection(connectionName);
 		
 		if(mapAction == MapAction.DELETE) {
 		
@@ -1180,7 +1180,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void connections_connect(FastBaseRESTAPICall c) throws Exception {
+	public void connections_connect(FuseBaseRESTAPICall c) throws Exception {
 		
 		String connectionName =
 			replaceURL(c.httpRequest().parameter("connectionName"));
@@ -1198,13 +1198,13 @@ public class FastBaseRESTAPI {
 										String connectionName,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 									
 									) throws Exception {
 	
 		try {
 		
-			if(fastBase.dbConnectionManager.connect(connectionName)) {
+			if(FuseBase.dbConnectionManager.connect(connectionName)) {
 		
 				this.apiResponseSuccess(
 					c.output(),
@@ -1247,7 +1247,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void connections_setdefault(FastBaseRESTAPICall c) throws Exception {
+	public void connections_setdefault(FuseBaseRESTAPICall c) throws Exception {
 		
 		String connectionName =
 			replaceURL(c.httpRequest().parameter("connectionName"));
@@ -1265,11 +1265,11 @@ public class FastBaseRESTAPI {
 										String connectionName,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 										
 										) throws Exception {
 		
-		if(fastBase.dbConnectionManager.setDefaultConnection(connectionName)) {
+		if(FuseBase.dbConnectionManager.setDefaultConnection(connectionName)) {
 		
 			this.apiResponseSuccess(
 				c.output(),
@@ -1290,7 +1290,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void connections_registeredqueries(FastBaseRESTAPICall c) throws Exception {
+	public void connections_registeredqueries(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.connections_registeredqueries(
 			c.jsonCallbackFunction(),
@@ -1302,20 +1302,20 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void connections_registeredqueries(	@Parameter(name="jsonCallbackFunction", required=false)
 												String jsonCallbackFunction,
-												FastBaseRESTAPICall c
+												FuseBaseRESTAPICall c
 												
 												) throws Exception {
 		
 		this.jsonReply(
 			c.output(),
-			fastBase.queryManager.getJSONBuilder(),
+			FuseBase.queryManager.getJSONBuilder(),
 			c.jsonCallbackFunction()
 		);
 		
 	}
 	
 	@HTTP_ENDPOINT
-	public void connections_jdbcdriverinfo(FastBaseRESTAPICall c) throws Exception {
+	public void connections_jdbcdriverinfo(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.connections_jdbcdriverinfo(
 			c.jsonCallbackFunction(),
@@ -1327,7 +1327,7 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void connections_jdbcdriverinfo(	@Parameter(name="jsonCallbackFunction", required=false)
 											String jsonCallbackFunction,
-											FastBaseRESTAPICall c
+											FuseBaseRESTAPICall c
 											
 											) throws Exception {
 		
@@ -1340,7 +1340,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void connections_querytypes(FastBaseRESTAPICall c) throws Exception {
+	public void connections_querytypes(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.connections_querytypes(
 			c.jsonCallbackFunction(),
@@ -1352,7 +1352,7 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void connections_querytypes(	@Parameter(name="jsonCallbackFunction", required=false)
 											String jsonCallbackFunction,
-											FastBaseRESTAPICall c
+											FuseBaseRESTAPICall c
 											
 											) throws Exception {
 		
@@ -1365,7 +1365,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void connections_query(FastBaseRESTAPICall c) throws Exception {
+	public void connections_query(FuseBaseRESTAPICall c) throws Exception {
 		
 		String
 			connectionName = c.httpRequest().parameter("connectionName"),
@@ -1410,7 +1410,7 @@ public class FastBaseRESTAPI {
 									OutputType outputType,
 									@Parameter(name="jsonCallbackFunction", required=false)
 									String jsonCallbackFunction,
-									FastBaseRESTAPICall c
+									FuseBaseRESTAPICall c
 									
 									) throws Exception {
 		
@@ -1426,7 +1426,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void connections_registeredquery(FastBaseRESTAPICall c) throws Exception {
+	public void connections_registeredquery(FuseBaseRESTAPICall c) throws Exception {
 		
 		String
 			connectionName = c.httpRequest().parameter("connectionName"),
@@ -1470,7 +1470,7 @@ public class FastBaseRESTAPI {
 												OutputType outputType,
 												@Parameter(name="jsonCallbackFunction", required=false)
 												String jsonCallbackFunction,
-												FastBaseRESTAPICall c
+												FuseBaseRESTAPICall c
 											
 											) throws Exception {
 		
@@ -1478,7 +1478,7 @@ public class FastBaseRESTAPI {
 		
 		if(queryId != null) {
 		
-			if(!fastBase.queryManager.hasQuery(queryId)) {
+			if(!FuseBase.queryManager.hasQuery(queryId)) {
 		
 				this.apiResponseError(
 					c.output(),
@@ -1491,7 +1491,7 @@ public class FastBaseRESTAPI {
 			} else {
 		
 				query =
-					fastBase.queryManager.getQuery(queryId);
+					FuseBase.queryManager.getQuery(queryId);
 					
 				this.queryConnection(
 					(connectionName == null ? query.getConnectionName() : connectionName),
@@ -1521,9 +1521,9 @@ public class FastBaseRESTAPI {
 									QueryType queryType,
 									OutputType outputType,
 									String jsonCallbackFunction,
-									FastBaseRESTAPICall c			) throws Exception {
+									FuseBaseRESTAPICall c			) throws Exception {
 		
-		if(!fastBase.dbConnectionManager.hasConnection(connectionName)) {
+		if(!FuseBase.dbConnectionManager.hasConnection(connectionName)) {
 		
 			this.apiResponseError(
 				c.output(),
@@ -1586,7 +1586,7 @@ public class FastBaseRESTAPI {
 			try {
 		
 				QueryObject queryObject =
-					fastBase.queryManager.getQueryObject(
+					FuseBase.queryManager.getQueryObject(
 						connectionName,
 						query
 					);
@@ -1603,7 +1603,7 @@ public class FastBaseRESTAPI {
 		
 				}
 		
-				fastBase.queryManager.printResultSet(
+				FuseBase.queryManager.printResultSet(
 					queryObject,
 					dataWriter
 				);
@@ -1635,7 +1635,7 @@ public class FastBaseRESTAPI {
 			try {
 		
 				int recordCount =
-					fastBase.queryManager.dml(
+					FuseBase.queryManager.dml(
 						connectionName,
 						query
 					);
@@ -1663,7 +1663,7 @@ public class FastBaseRESTAPI {
 			try {
 		
 				int ddlStatus =
-					fastBase.queryManager.dml(
+					FuseBase.queryManager.dml(
 						connectionName,
 						query
 					);
@@ -1691,7 +1691,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void connections_query_register(FastBaseRESTAPICall c) throws Exception {
+	public void connections_query_register(FuseBaseRESTAPICall c) throws Exception {
 		
 		String
 			connectionName = c.httpRequest().parameter("connectionName"),
@@ -1717,12 +1717,12 @@ public class FastBaseRESTAPI {
 											String queryId,
 											@Parameter(name="jsonCallbackFunction", required=false)
 											String jsonCallbackFunction,
-											FastBaseRESTAPICall c
+											FuseBaseRESTAPICall c
 											
 											) throws Exception {
 		
 		MapAction mapAction =
-			fastBase.queryManager.addOrUpdateQuery(
+			FuseBase.queryManager.addOrUpdateQuery(
 				queryId,
 				query,
 				connectionName
@@ -1749,7 +1749,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void connections_query_delete(FastBaseRESTAPICall c) throws Exception {
+	public void connections_query_delete(FuseBaseRESTAPICall c) throws Exception {
 		
 		String queryId = c.httpRequest().parameter("queryId");
 		
@@ -1766,12 +1766,12 @@ public class FastBaseRESTAPI {
 											String queryId,
 											@Parameter(name="jsonCallbackFunction", required=false)
 											String jsonCallbackFunction,
-											FastBaseRESTAPICall c
+											FuseBaseRESTAPICall c
 										
 										) throws Exception {
 		
 		MapAction mapAction =
-			fastBase.queryManager.deleteQuery(queryId);
+			FuseBase.queryManager.deleteQuery(queryId);
 		
 		if(mapAction == MapAction.DELETE) {
 		
@@ -1794,7 +1794,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void files_directorylisting(FastBaseRESTAPICall c) throws Exception {
+	public void files_directorylisting(FuseBaseRESTAPICall c) throws Exception {
 		
 		String path =
 			this.replaceURL(
@@ -1814,20 +1814,20 @@ public class FastBaseRESTAPI {
 										String jsonCallbackFunction,
 										@Parameter(name="path")
 										String path,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 										
 										) throws Exception {
 		
 		this.jsonReply(
 			c.output(),
-			this.fastBase.fileManager.listFullDirectory(path),
+			this.FuseBase.fileManager.listFullDirectory(path),
 			c.jsonCallbackFunction()
 		);
 		
 	}
 	
 	@HTTP_ENDPOINT
-	public void apps(FastBaseRESTAPICall c) throws Exception {
+	public void apps(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.apps(
 			c.jsonCallbackFunction(),
@@ -1839,20 +1839,20 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void apps(	@Parameter(name="jsonCallbackFunction", required=false)
 						String jsonCallbackFunction,
-						FastBaseRESTAPICall c
+						FuseBaseRESTAPICall c
 					
 					) throws Exception {
 	
 		this.jsonReply(
 			c.output(),
-			this.fastBase.fileManager.listFullDirectory("./" + Config.APPS_DIRECTORY + "/"),
+			this.FuseBase.fileManager.listFullDirectory("./" + Config.APPS_DIRECTORY + "/"),
 			c.jsonCallbackFunction()
 		);
 		
 	}
 	
 	@HTTP_ENDPOINT
-	public void apps_upload(FastBaseRESTAPICall c) throws Exception {
+	public void apps_upload(FuseBaseRESTAPICall c) throws Exception {
 		
 		String
 			fileName = replaceURL(c.httpRequest().parameter("fileName")),
@@ -1874,7 +1874,7 @@ public class FastBaseRESTAPI {
 								String fileContents,
 								@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 							) throws Exception {
 		
@@ -1886,7 +1886,7 @@ public class FastBaseRESTAPI {
 				fileName = "./" + Config.APPS_DIRECTORY + "/" + fileName;
 			}
 		
-			this.fastBase.fileManager.writeToFile(
+			this.FuseBase.fileManager.writeToFile(
 				fileName,
 				fileContents
 			);
@@ -1910,7 +1910,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void file_upload(FastBaseRESTAPICall c) throws Exception {
+	public void file_upload(FuseBaseRESTAPICall c) throws Exception {
 			
 		this.file_upload(
 			replaceURL(c.httpRequest().parameter("fileName")),
@@ -1928,7 +1928,7 @@ public class FastBaseRESTAPI {
 								byte[] fileContents,
 								@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 							) throws Exception {
 		
@@ -1946,7 +1946,7 @@ public class FastBaseRESTAPI {
 				fileName = "./" + fileName;
 			}
 				
-			this.fastBase.fileManager.writeToBinaryFile(
+			this.FuseBase.fileManager.writeToBinaryFile(
 				fileName,
 				fileContents
 			);
@@ -1970,7 +1970,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void scripts(FastBaseRESTAPICall c) throws Exception {
+	public void scripts(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.scripts(
 			c.jsonCallbackFunction(),
@@ -1982,20 +1982,20 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void scripts(	@Parameter(name="jsonCallbackFunction", required=false)
 							String jsonCallbackFunction,
-							FastBaseRESTAPICall c
+							FuseBaseRESTAPICall c
 						
 						) throws Exception {
 		
 		this.jsonReply(
 			c.output(),
-			fastBase.scriptManager.getJSONBuilder(),
+			FuseBase.scriptManager.getJSONBuilder(),
 			c.jsonCallbackFunction()
 		);
 		
 	}
 	
 	@HTTP_ENDPOINT
-	public void scripts_source(FastBaseRESTAPICall c) throws Exception {
+	public void scripts_source(FuseBaseRESTAPICall c) throws Exception {
 		
 		String name = replaceURL(c.httpRequest().parameter("name"));
 		
@@ -2013,19 +2013,19 @@ public class FastBaseRESTAPI {
 							String name,
 							@Parameter(name="jsonCallbackFunction", required=false)
 							String jsonCallbackFunction,
-							FastBaseRESTAPICall c
+							FuseBaseRESTAPICall c
 						
 						) throws Exception {
 		
 		this.textReply(
 			c.output(),
-			fastBase.scriptManager.getScript(name).source()
+			FuseBase.scriptManager.getScript(name).source()
 		);
 		
 	}
 	
 	@HTTP_ENDPOINT
-	public void scripts_upload(FastBaseRESTAPICall c) throws Exception {
+	public void scripts_upload(FuseBaseRESTAPICall c) throws Exception {
 		
 		String name = replaceURL(c.httpRequest().parameter("name"));
 		
@@ -2045,12 +2045,12 @@ public class FastBaseRESTAPI {
 								String source,
 								@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 								
 								) throws Exception {
 		
 		MapAction mapAction =
-			fastBase.scriptManager.addOrUpdateScript(
+			FuseBase.scriptManager.addOrUpdateScript(
 				name,
 				source
 			);
@@ -2076,7 +2076,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void scripts_delete(FastBaseRESTAPICall c) throws Exception {
+	public void scripts_delete(FuseBaseRESTAPICall c) throws Exception {
 		
 		String name = replaceURL(c.httpRequest().parameter("name"));
 		
@@ -2093,12 +2093,12 @@ public class FastBaseRESTAPI {
 								String name,
 								@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 								) throws Exception {
 		
 		MapAction mapAction =
-			fastBase.scriptManager.deleteScript(name);
+			FuseBase.scriptManager.deleteScript(name);
 		
 		if(mapAction == MapAction.DELETE) {
 		
@@ -2121,7 +2121,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void scripts_run(FastBaseRESTAPICall c) throws Exception {
+	public void scripts_run(FuseBaseRESTAPICall c) throws Exception {
 		
 		String name = replaceURL(c.httpRequest().parameter("name"));
 		
@@ -2138,19 +2138,19 @@ public class FastBaseRESTAPI {
 								String name,
 								@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 							) throws Exception {
 		
 		Script script =
-			fastBase.scriptManager.getScript(name);
+			FuseBase.scriptManager.getScript(name);
 			
 		if(script != null) {
 		
 			try {
 		
 				script.init(
-					this.fastBase.scriptAPI()
+					this.FuseBase.scriptAPI()
 				);
 		
 				script.addBinding(
@@ -2200,7 +2200,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void scripts_run_anonymous(FastBaseRESTAPICall c) throws Exception {
+	public void scripts_run_anonymous(FuseBaseRESTAPICall c) throws Exception {
 		
 		String scriptSource = replaceURL(c.httpRequest().parameter("source"));
 		
@@ -2217,7 +2217,7 @@ public class FastBaseRESTAPI {
 										String scriptSource,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 							
 									) throws Exception {
 			
@@ -2229,7 +2229,7 @@ public class FastBaseRESTAPI {
 					new PersistedDataOutputStream();
 				
 				Script.runAnonymousScript(
-					this.fastBase.scriptAPI(),
+					this.FuseBase.scriptAPI(),
 					c.httpRequest().getParameters(),
 					c.httpRequest().getCookies(),
 					persistedOutput,
@@ -2268,7 +2268,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void users(FastBaseRESTAPICall c) throws Exception {
+	public void users(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.users(
 			c.jsonCallbackFunction(),
@@ -2280,20 +2280,20 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void users(	@Parameter(name="jsonCallbackFunction", required=false)
 						String jsonCallbackFunction,
-						FastBaseRESTAPICall c
+						FuseBaseRESTAPICall c
 							
 								) throws Exception {
 		
 		this.jsonReply(
 			c.output(),
-			this.fastBase.userManager.getJSONBuilder(),
+			this.FuseBase.userManager.getJSONBuilder(),
 			c.jsonCallbackFunction()
 		);
 		
 	}
 	
 	@HTTP_ENDPOINT
-	public void users_sessions_deleteall(FastBaseRESTAPICall c) throws Exception {
+	public void users_sessions_deleteall(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.users_sessions_deleteall(
 			c.jsonCallbackFunction(),
@@ -2305,11 +2305,11 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void users_sessions_deleteall(	@Parameter(name="jsonCallbackFunction", required=false)
 											String jsonCallbackFunction,
-											FastBaseRESTAPICall c
+											FuseBaseRESTAPICall c
 							
 										) throws Exception {
 		
-		this.fastBase.userManager.deleteAllUserSessions();
+		this.FuseBase.userManager.deleteAllUserSessions();
 		
 		this.apiResponseSuccess(
 			c.output(),
@@ -2320,7 +2320,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void users_sessions_removeexpired(FastBaseRESTAPICall c) throws Exception {
+	public void users_sessions_removeexpired(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.users_sessions_removeexpired(
 			c.jsonCallbackFunction(),
@@ -2332,11 +2332,11 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void users_sessions_removeexpired(	@Parameter(name="jsonCallbackFunction", required=false)
 											String jsonCallbackFunction,
-											FastBaseRESTAPICall c
+											FuseBaseRESTAPICall c
 							
 										) throws Exception {
 		
-		this.fastBase.userManager.removeExpiredSessions();
+		this.FuseBase.userManager.removeExpiredSessions();
 		
 		this.apiResponseSuccess(
 			c.output(),
@@ -2347,7 +2347,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void users_sessions(FastBaseRESTAPICall c) throws Exception {
+	public void users_sessions(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.users_sessions(
 			c.jsonCallbackFunction(),
@@ -2359,20 +2359,20 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void users_sessions(	@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 								) throws Exception {
 		
 		this.jsonReply(
 			c.output(),
-			this.fastBase.userManager.getUserSessionsJSONBuilder(),
+			this.FuseBase.userManager.getUserSessionsJSONBuilder(),
 			c.jsonCallbackFunction()
 		);
 		
 	}
 	
 	@HTTP_ENDPOINT
-	public void users_roles(FastBaseRESTAPICall c) throws Exception {
+	public void users_roles(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.users_roles(
 			c.jsonCallbackFunction(),
@@ -2384,20 +2384,20 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void users_roles(	@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 								) throws Exception {
 		
 		this.jsonReply(
 			c.output(),
-			this.fastBase.userManager.getRolesJSONBuilder(),
+			this.FuseBase.userManager.getRolesJSONBuilder(),
 			c.jsonCallbackFunction()
 		);
 		
 	}
 	
 	@HTTP_ENDPOINT
-	public void users_roles_types(FastBaseRESTAPICall c) throws Exception {
+	public void users_roles_types(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.users_roles_types(
 			c.jsonCallbackFunction(),
@@ -2409,7 +2409,7 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void users_roles_types(	@Parameter(name="jsonCallbackFunction", required=false)
 									String jsonCallbackFunction,
-									FastBaseRESTAPICall c
+									FuseBaseRESTAPICall c
 							
 									) throws Exception {
 		
@@ -2422,7 +2422,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void users_roles_add(FastBaseRESTAPICall c) throws Exception {
+	public void users_roles_add(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.users_roles_add(
 			c.httpRequest().parameter("name"),
@@ -2443,12 +2443,12 @@ public class FastBaseRESTAPI {
 									String privilegeList,
 									@Parameter(name="jsonCallbackFunction", required=false)
 									String jsonCallbackFunction,
-									FastBaseRESTAPICall c
+									FuseBaseRESTAPICall c
 							
 									) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.addRole(
+			this.FuseBase.userManager.addRole(
 				name,
 				roleType,
 				privilegeList.split(",")
@@ -2475,7 +2475,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void users_roles_delete(FastBaseRESTAPICall c) throws Exception {
+	public void users_roles_delete(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.users_roles_delete(
 			c.httpRequest().parameter("name"),
@@ -2490,12 +2490,12 @@ public class FastBaseRESTAPI {
 									String name,
 									@Parameter(name="jsonCallbackFunction", required=false)
 									String jsonCallbackFunction,
-									FastBaseRESTAPICall c
+									FuseBaseRESTAPICall c
 							
 									) throws Exception {
 
 		MapAction mapAction =
-			this.fastBase.userManager.deleteRole(
+			this.FuseBase.userManager.deleteRole(
 				name
 			);
 			
@@ -2520,7 +2520,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void users_roles_delete_all(FastBaseRESTAPICall c) throws Exception {
+	public void users_roles_delete_all(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.users_roles_delete_all(
 			c.jsonCallbackFunction(),
@@ -2532,12 +2532,12 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void users_roles_delete_all(	@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 							
 										) throws Exception {
 
 		MapAction mapAction =
-			this.fastBase.userManager.deleteAllRoles();
+			this.FuseBase.userManager.deleteAllRoles();
 			
 		if(mapAction == MapAction.DELETE) {
 			
@@ -2560,7 +2560,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void users_roles_update_privileges(FastBaseRESTAPICall c) throws Exception {
+	public void users_roles_update_privileges(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.users_roles_update_privileges(
 			c.httpRequest().parameter("name"),
@@ -2581,17 +2581,17 @@ public class FastBaseRESTAPI {
 												String privilegeListToRemove,
 												@Parameter(name="jsonCallbackFunction", required=false)
 												String jsonCallbackFunction,
-												FastBaseRESTAPICall c
+												FuseBaseRESTAPICall c
 							
 											) throws Exception {
 		
-		this.fastBase.userManager.deleteRolePrivileges(
+		this.FuseBase.userManager.deleteRolePrivileges(
 			name,
 			privilegeListToRemove.split(",")
 		);
 		
 		MapAction mapAction =
-			this.fastBase.userManager.addRolePrivileges(
+			this.FuseBase.userManager.addRolePrivileges(
 				name,
 				privilegeList.split(",")
 			);
@@ -2617,7 +2617,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void users_roles_delete_privileges(FastBaseRESTAPICall c) throws Exception {
+	public void users_roles_delete_privileges(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.users_roles_delete_privileges(
 			c.httpRequest().parameter("name"),
@@ -2635,7 +2635,7 @@ public class FastBaseRESTAPI {
 												String privilegeList,
 												@Parameter(name="jsonCallbackFunction", required=false)
 												String jsonCallbackFunction,
-												FastBaseRESTAPICall c
+												FuseBaseRESTAPICall c
 							
 												) throws Exception {
 		
@@ -2643,7 +2643,7 @@ public class FastBaseRESTAPI {
 			privilegeList.split(",");
 			
 		MapAction mapAction =
-			this.fastBase.userManager.deleteRolePrivileges(
+			this.FuseBase.userManager.deleteRolePrivileges(
 				name,
 				privilegeArray
 			);
@@ -2669,7 +2669,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void api_privileges(FastBaseRESTAPICall c) throws Exception {
+	public void api_privileges(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.api_privileges(
 			c.jsonCallbackFunction(),
@@ -2681,7 +2681,7 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void api_privileges(	@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 								) throws Exception {
 		
@@ -2694,7 +2694,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_clientkeys(FastBaseRESTAPICall c) throws Exception {
+	public void user_clientkeys(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_clientkeys(
 			c.httpRequest().parameter("username"),
@@ -2709,12 +2709,12 @@ public class FastBaseRESTAPI {
 									String username,
 									@Parameter(name="jsonCallbackFunction", required=false)
 									String jsonCallbackFunction,
-									FastBaseRESTAPICall c
+									FuseBaseRESTAPICall c
 							
 								) throws Exception {
 		
 		JSONBuilder jb =
-			this.fastBase.userManager.getUserClientKeys(username);
+			this.FuseBase.userManager.getUserClientKeys(username);
 			
 		if(jb != null) {
 			
@@ -2737,7 +2737,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_generateclientkey(FastBaseRESTAPICall c) throws Exception {
+	public void user_generateclientkey(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_generateclientkey(
 			c.httpRequest().parameter("username"),
@@ -2752,12 +2752,12 @@ public class FastBaseRESTAPI {
 										String username,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 							
 										) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.addClientKey(username);
+			this.FuseBase.userManager.addClientKey(username);
 			
 		if(mapAction == MapAction.ADD) {
 			
@@ -2780,7 +2780,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_clientkeys_add(FastBaseRESTAPICall c) throws Exception {
+	public void user_clientkeys_add(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_clientkeys_add(
 			c.httpRequest().parameter("username"),
@@ -2798,12 +2798,12 @@ public class FastBaseRESTAPI {
 										String clientKey,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 							
 										) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.addExternalClientKey(username, clientKey);
+			this.FuseBase.userManager.addExternalClientKey(username, clientKey);
 			
 		if(mapAction == MapAction.ADD) {
 			
@@ -2826,7 +2826,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_clientkey_delete(FastBaseRESTAPICall c) throws Exception {
+	public void user_clientkey_delete(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_clientkey_delete(
 			c.httpRequest().parameter("username"),
@@ -2844,12 +2844,12 @@ public class FastBaseRESTAPI {
 										String clientKey,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 							
 									) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.deleteClientKey(
+			this.FuseBase.userManager.deleteClientKey(
 				username,
 				clientKey
 			);
@@ -2875,7 +2875,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_clientkeys_deleteall(FastBaseRESTAPICall c) throws Exception {
+	public void user_clientkeys_deleteall(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_clientkeys_deleteall(
 			c.httpRequest().parameter("username"),
@@ -2890,12 +2890,12 @@ public class FastBaseRESTAPI {
 											String username,
 											@Parameter(name="jsonCallbackFunction", required=false)
 											String jsonCallbackFunction,
-											FastBaseRESTAPICall c
+											FuseBaseRESTAPICall c
 							
 										) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.deleteUserClientKeys(username);
+			this.FuseBase.userManager.deleteUserClientKeys(username);
 			
 		if(mapAction == MapAction.DELETE_ALL) {
 			
@@ -2918,7 +2918,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_privileges(FastBaseRESTAPICall c) throws Exception {
+	public void user_privileges(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_privileges(
 			c.httpRequest().parameter("username"),
@@ -2933,12 +2933,12 @@ public class FastBaseRESTAPI {
 									String username,
 									@Parameter(name="jsonCallbackFunction", required=false)
 									String jsonCallbackFunction,
-									FastBaseRESTAPICall c
+									FuseBaseRESTAPICall c
 							
 									) throws Exception {
 		
 		JSONBuilder jb =
-			this.fastBase.userManager.getUserRolesAndPrivilegesJSONBuilder(
+			this.FuseBase.userManager.getUserRolesAndPrivilegesJSONBuilder(
 				username
 			);
 			
@@ -2963,7 +2963,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_privileges_add(FastBaseRESTAPICall c) throws Exception {
+	public void user_privileges_add(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_privileges_add(
 			c.httpRequest().parameter("username"),
@@ -2981,12 +2981,12 @@ public class FastBaseRESTAPI {
 										String privilegeList,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 							
 									) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.addUserPrivileges(
+			this.FuseBase.userManager.addUserPrivileges(
 				username,
 				privilegeList.split(",")
 			);
@@ -3012,7 +3012,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_privileges_delete(FastBaseRESTAPICall c) throws Exception {
+	public void user_privileges_delete(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_privileges_delete(
 			c.httpRequest().parameter("username"),
@@ -3030,12 +3030,12 @@ public class FastBaseRESTAPI {
 										String privilegeList,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 							
 									) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.deleteUserPrivileges(
+			this.FuseBase.userManager.deleteUserPrivileges(
 				username,
 				privilegeList.split(",")
 			);
@@ -3061,7 +3061,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_privileges_deleteall(FastBaseRESTAPICall c) throws Exception {
+	public void user_privileges_deleteall(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_privileges_deleteall(
 			c.httpRequest().parameter("username"),
@@ -3076,12 +3076,12 @@ public class FastBaseRESTAPI {
 											String username,
 											@Parameter(name="jsonCallbackFunction", required=false)
 											String jsonCallbackFunction,
-											FastBaseRESTAPICall c
+											FuseBaseRESTAPICall c
 							
 										) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.deleteAllUserPrivileges(
+			this.FuseBase.userManager.deleteAllUserPrivileges(
 				username
 			);
 			
@@ -3106,7 +3106,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_roles_add(FastBaseRESTAPICall c) throws Exception {
+	public void user_roles_add(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_roles_add(
 			c.httpRequest().parameter("username"),
@@ -3124,12 +3124,12 @@ public class FastBaseRESTAPI {
 								String roleList,
 								@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 								) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.addUserRoles(
+			this.FuseBase.userManager.addUserRoles(
 				username,
 				roleList.split(",")
 			);
@@ -3155,7 +3155,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_roles_delete(FastBaseRESTAPICall c) throws Exception {
+	public void user_roles_delete(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_roles_delete(
 			c.httpRequest().parameter("username"),
@@ -3173,12 +3173,12 @@ public class FastBaseRESTAPI {
 									String roleList,
 									@Parameter(name="jsonCallbackFunction", required=false)
 									String jsonCallbackFunction,
-									FastBaseRESTAPICall c
+									FuseBaseRESTAPICall c
 							
 									) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.deleteUserRoles(
+			this.FuseBase.userManager.deleteUserRoles(
 				username,
 				roleList.split(",")
 			);
@@ -3204,7 +3204,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_roles_deleteall(FastBaseRESTAPICall c) throws Exception {
+	public void user_roles_deleteall(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_roles_deleteall(
 			c.httpRequest().parameter("username"),
@@ -3219,12 +3219,12 @@ public class FastBaseRESTAPI {
 										String username,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 							
 										) throws Exception {
 		
 		MapAction mapAction =
-			this.fastBase.userManager.deleteAllUserRoles(
+			this.FuseBase.userManager.deleteAllUserRoles(
 				username
 			);
 			
@@ -3249,7 +3249,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void user_privilegesandroles_update(FastBaseRESTAPICall c) throws Exception {
+	public void user_privilegesandroles_update(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.user_privilegesandroles_update(
 			c.httpRequest().parameter("username"),
@@ -3278,7 +3278,7 @@ public class FastBaseRESTAPI {
 			String roleListToRemove,
 			@Parameter(name="jsonCallbackFunction", required=false)
 			String jsonCallbackFunction,
-			FastBaseRESTAPICall c
+			FuseBaseRESTAPICall c
 			
 		) throws Exception {
 		
@@ -3286,25 +3286,25 @@ public class FastBaseRESTAPI {
 			new MapAction[4];
 		
 		mapActions[0] =
-			this.fastBase.userManager.addUserPrivileges(
+			this.FuseBase.userManager.addUserPrivileges(
 				username,
 				privilegeList.split(",")
 			);
 		
 		mapActions[1] =
-			this.fastBase.userManager.deleteUserPrivileges(
+			this.FuseBase.userManager.deleteUserPrivileges(
 				username,
 				privilegeListToRemove.split(",")
 			);
 		
 		mapActions[2] =
-			this.fastBase.userManager.addUserRoles(
+			this.FuseBase.userManager.addUserRoles(
 				username,
 				roleList.split(",")
 			);
 		
 		mapActions[3] =
-			this.fastBase.userManager.deleteUserRoles(
+			this.FuseBase.userManager.deleteUserRoles(
 				username,
 				roleListToRemove.split(",")
 			);
@@ -3334,7 +3334,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void scheduler_jobs(FastBaseRESTAPICall c) throws Exception {
+	public void scheduler_jobs(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.scheduler_jobs(
 			c.jsonCallbackFunction(),
@@ -3346,20 +3346,20 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void scheduler_jobs(	@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
-								FastBaseRESTAPICall c
+								FuseBaseRESTAPICall c
 							
 								) throws Exception {
 		
 		this.jsonReply(
 			c.output(),
-			this.fastBase.scheduler().getJSONBuilder(),
+			this.FuseBase.scheduler().getJSONBuilder(),
 			c.jsonCallbackFunction()
 		);
 		
 	}
 	
 	@HTTP_ENDPOINT
-	public void scheduler_jobs_create(FastBaseRESTAPICall c) throws Exception {
+	public void scheduler_jobs_create(FuseBaseRESTAPICall c) throws Exception {
 		
 		String
 			name = this.replaceURL(c.httpRequest().parameter("name")),
@@ -3402,16 +3402,16 @@ public class FastBaseRESTAPI {
 										TimeUnit timeUnit,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 									
 									) throws Exception {
 		
 		Script script =
-			this.fastBase.scriptManager.getScript(scriptName);
+			this.FuseBase.scriptManager.getScript(scriptName);
 		
 		try {
 			
-			this.fastBase.scheduler().scheduleJob(
+			this.FuseBase.scheduler().scheduleJob(
 				name,
 				script,
 				initialDelay,
@@ -3438,7 +3438,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void scheduler_timeunits(FastBaseRESTAPICall c) throws Exception {
+	public void scheduler_timeunits(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.scheduler_timeunits(
 			c.jsonCallbackFunction(),
@@ -3450,20 +3450,20 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void scheduler_timeunits(	@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 											
 										) throws Exception {
 		
 		this.jsonReply(
 			c.output(),
-			this.fastBase.scheduler().getTimeUnitJSONBuilder(),
+			this.FuseBase.scheduler().getTimeUnitJSONBuilder(),
 			c.jsonCallbackFunction()
 		);
 		
 	}
 	
 	@HTTP_ENDPOINT
-	public void scheduler_jobs_delete(FastBaseRESTAPICall c) throws Exception {
+	public void scheduler_jobs_delete(FuseBaseRESTAPICall c) throws Exception {
 		
 		String
 			name = this.replaceURL(c.httpRequest().parameter("name"));
@@ -3482,13 +3482,13 @@ public class FastBaseRESTAPI {
 										String name,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 									
 									) throws Exception {
 		
 		try {
 			
-			this.fastBase.scheduler().deleteJob(
+			this.FuseBase.scheduler().deleteJob(
 				name
 			);
 			
@@ -3511,7 +3511,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void scheduler_jobs_start(FastBaseRESTAPICall c) throws Exception {
+	public void scheduler_jobs_start(FuseBaseRESTAPICall c) throws Exception {
 		
 		String
 			name = this.replaceURL(c.httpRequest().parameter("name"));
@@ -3530,13 +3530,13 @@ public class FastBaseRESTAPI {
 										String name,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 									
 									) throws Exception {
 		
 		try {
 			
-			this.fastBase.scheduler().startJob(
+			this.FuseBase.scheduler().startJob(
 				name
 			);
 			
@@ -3559,7 +3559,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void scheduler_jobs_logs(FastBaseRESTAPICall c) throws Exception {
+	public void scheduler_jobs_logs(FuseBaseRESTAPICall c) throws Exception {
 		
 		String
 			name = this.replaceURL(c.httpRequest().parameter("name"));
@@ -3578,7 +3578,7 @@ public class FastBaseRESTAPI {
 										String name,
 										@Parameter(name="jsonCallbackFunction", required=false)
 										String jsonCallbackFunction,
-										FastBaseRESTAPICall c
+										FuseBaseRESTAPICall c
 									
 									) throws Exception {
 		
@@ -3586,7 +3586,7 @@ public class FastBaseRESTAPI {
 			
 			this.jsonReply(
 				c.output(),
-				this.fastBase.fileManager.listFullDirectory(Scheduler.SCHEDULER_LOG_DIRECTORY + name),
+				this.FuseBase.fileManager.listFullDirectory(Scheduler.SCHEDULER_LOG_DIRECTORY + name),
 				c.jsonCallbackFunction()
 			);
 			
@@ -3603,7 +3603,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void scheduler_jobs_logs_getfile(FastBaseRESTAPICall c) throws Exception {
+	public void scheduler_jobs_logs_getfile(FuseBaseRESTAPICall c) throws Exception {
 		
 		String
 			name = this.replaceURL(c.httpRequest().parameter("name")),
@@ -3626,14 +3626,14 @@ public class FastBaseRESTAPI {
 												String fileName,
 												@Parameter(name="jsonCallbackFunction", required=false)
 												String jsonCallbackFunction,
-												FastBaseRESTAPICall c
+												FuseBaseRESTAPICall c
 											
 											) throws Exception {
 		
 		try {
 			
 			String fullPath =
-				this.fastBase.scheduler().getFullPathOfSchedulerJobLogFile(
+				this.FuseBase.scheduler().getFullPathOfSchedulerJobLogFile(
 					name,
 					fileName
 				);
@@ -3679,7 +3679,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void geturl(FastBaseRESTAPICall c) throws Exception {
+	public void geturl(FuseBaseRESTAPICall c) throws Exception {
 		
 		String url =
 			replaceURL(c.httpRequest().parameter("url"));
@@ -3692,9 +3692,9 @@ public class FastBaseRESTAPI {
 	}
 	
 	@API(type=HttpRequestType.GET)
-	public void geturl(	@Parameter(name="url") String url, FastBaseRESTAPICall c) throws Exception {
+	public void geturl(	@Parameter(name="url") String url, FuseBaseRESTAPICall c) throws Exception {
 		
-		this.fastBase.fileManager.printURL(
+		this.FuseBase.fileManager.printURL(
 			c.output(),
 			url
 		);
@@ -3702,7 +3702,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void system_export_all(FastBaseRESTAPICall c) throws Exception {
+	public void system_export_all(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.system_export_all(c.jsonCallbackFunction(), c);
 		
@@ -3711,17 +3711,17 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.GET)
 	public void system_export_all(	@Parameter(name="jsonCallbackFunction", required=false)
 									String jsonCallbackFunction,
-									FastBaseRESTAPICall c) throws Exception {
+									FuseBaseRESTAPICall c) throws Exception {
 		try {
 			
 			byte[] exportData =
-				this.fastBase.exportManager.exportAll();
+				this.FuseBase.exportManager.exportAll();
 
 			HttpResponse.header(
 				c.output(),
 				new String[] {
 					"Content-Type: application/octet-stream",
-					"Content-Disposition: inline; filename=\"fastbase.bak\""
+					"Content-Disposition: inline; filename=\"FuseBase.bak\""
 				}
 			);
 
@@ -3736,7 +3736,7 @@ public class FastBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void system_import_all(FastBaseRESTAPICall c) throws Exception {
+	public void system_import_all(FuseBaseRESTAPICall c) throws Exception {
 		
 		this.system_import_all(c.jsonCallbackFunction(), c);
 		
@@ -3745,19 +3745,19 @@ public class FastBaseRESTAPI {
 	@API(type=HttpRequestType.POST)
 	public void system_import_all(	@Parameter(name="jsonCallbackFunction", required=false)
 									String jsonCallbackFunction,
-									FastBaseRESTAPICall c) throws Exception {
+									FuseBaseRESTAPICall c) throws Exception {
 		
 		
 			
 		try {
 			
-			this.fastBase.exportManager.importAll(
+			this.FuseBase.exportManager.importAll(
 				c.httpRequest().getClientData()
 			);
 			
 			this.apiResponseSuccess(
 				c.output(),
-				"Successfully imported FastBase data.",
+				"Successfully imported FuseBase data.",
 				c.jsonCallbackFunction()
 			);
 			
@@ -3767,7 +3767,7 @@ public class FastBaseRESTAPI {
 			
 			this.apiResponseError(
 				c.output(),
-				"An error ocurred while importing FastBase data. Error: " + e.getMessage(),
+				"An error ocurred while importing FuseBase data. Error: " + e.getMessage(),
 				c.jsonCallbackFunction()
 			);
 			
@@ -3933,10 +3933,10 @@ public class FastBaseRESTAPI {
 		
 	}
 	
-	public FastBaseRESTAPIMethod[] httpEndpointMethods() {
+	public FuseBaseRESTAPIMethod[] httpEndpointMethods() {
 		
 		return this.httpEndpointMethods.values().toArray(
-			new FastBaseRESTAPIMethod[0]
+			new FuseBaseRESTAPIMethod[0]
 		);
 		
 	}

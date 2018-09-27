@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.io.File;
 import java.util.jar.JarFile;
 
-public class FastBase implements Serializable {
+public class FuseBase implements Serializable {
 	
-	private String fastBaseSerializationFilename;
+	private String fuseBaseSerializationFilename;
 	private String fuseDBSerializationFilename;
 	
 	public DBConnectionManager dbConnectionManager;
@@ -36,13 +36,13 @@ public class FastBase implements Serializable {
 	public UserManager userManager;
 	public transient ExportManager exportManager;
 	
-	private FastBase me;
+	private FuseBase me;
 	
 	private transient ScriptAPI scriptAPI;
 	
-	public FastBase(String fastBaseSerializationFilename) throws Exception {
+	public FuseBase(String fuseBaseSerializationFilename) throws Exception {
 		
-		this.fastBaseSerializationFilename = fastBaseSerializationFilename;
+		this.fuseBaseSerializationFilename = fuseBaseSerializationFilename;
 		
 		this.dbConnectionManager = new DBConnectionManager();
 		this.scriptManager = new ScriptManager();
@@ -73,29 +73,29 @@ public class FastBase implements Serializable {
 		this.scheduler.setScriptAPI(this.scriptAPI);
 	}
 	
-	public static FastBase FastBaseFactory(String fastBaseSerializationFilename) throws Exception {
+	public static FuseBase FuseBaseFactory(String fuseBaseSerializationFilename) throws Exception {
 		
-		FastBase fastBase = null;
+		FuseBase fuseBase = null;
 		
-		File f = new File(fastBaseSerializationFilename);
+		File f = new File(fuseBaseSerializationFilename);
 		
 		if(f.exists()) {
 			
-			fastBase =
-				FastBase.deserialize(fastBaseSerializationFilename);
+			fuseBase =
+				FuseBase.deserialize(fuseBaseSerializationFilename);
 			
 		} else if(!f.exists()) {
 			
 			f.getParentFile().mkdirs();
 			
-			fastBase = new FastBase(
-				fastBaseSerializationFilename
+			fuseBase = new FuseBase(
+				fuseBaseSerializationFilename
 			);
 		}
 		
-		fastBase.createScriptAPI();
+		fuseBase.createScriptAPI();
 		
-		return fastBase;
+		return fuseBase;
 		
 	}
 	
@@ -112,7 +112,7 @@ public class FastBase implements Serializable {
 			
 			this.scheduler().uninitialize();
 			
-			FileOutputStream fileOut = new FileOutputStream(this.fastBaseSerializationFilename);
+			FileOutputStream fileOut = new FileOutputStream(this.fuseBaseSerializationFilename);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(this);
 			out.close();
@@ -124,45 +124,45 @@ public class FastBase implements Serializable {
 		}
 	}
 	
-	private static FastBase deserialize(String fastBaseSerializationFilename) {
-		FastBase fastBase = null;
+	private static FuseBase deserialize(String fuseBaseSerializationFilename) {
+		FuseBase fuseBase = null;
 		
 		try {
-			FileInputStream fileIn = new FileInputStream(fastBaseSerializationFilename);
+			FileInputStream fileIn = new FileInputStream(fuseBaseSerializationFilename);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
 			
-			fastBase = (FastBase)in.readObject();
+			fuseBase = (FuseBase)in.readObject();
 			
 			in.close();
 			fileIn.close();
 			
-			//fastBase.dbConnectionManager.connectAll();
+			//fuseBase.dbConnectionManager.connectAll();
 			
-			fastBase.scheduler().initialize();
-			fastBase.scheduler().setScriptAPI(fastBase.scriptAPI());
+			fuseBase.scheduler().initialize();
+			fuseBase.scheduler().setScriptAPI(fuseBase.scriptAPI());
 			
-			fastBase.userManager.startSessionCleaner();
+			fuseBase.userManager.startSessionCleaner();
 			
-			fastBase.exportManager = new ExportManager(fastBase);
+			fuseBase.exportManager = new ExportManager(fuseBase);
 			
-			fastBase.addShutdownHook();
+			fuseBase.addShutdownHook();
 			
 		} catch(Exception e) {
 			// TODO: Add logging
 			System.out.println(e.getMessage());
 		}
 		
-		return fastBase;
+		return fuseBase;
 	}
 	
 	/*
 		Run it in background:
 		
 			Unsecured:
-				nohup java -jar fastbase.jar -port=80 > log.txt &
+				nohup java -jar fusebase.jar -port=80 > log.txt &
 			
 			Secured:
-				nohup java -jar fastbase.jar -useHttps=true -sslCertificateFileName=NameOfCertificate -sslKeyStorePassword=Password
+				nohup java -jar fusebase.jar -useHttps=true -sslCertificateFileName=NameOfCertificate -sslKeyStorePassword=Password
 				
 	*/
 	public static void main(String args[]) throws Exception {
@@ -185,14 +185,14 @@ public class FastBase implements Serializable {
 
 		JDBCDriverInfo.readInfoFromFile(null);
 		
-		FastBase fastBase =
-			FastBase.FastBaseFactory(
-				parameters.get("fastbase_serialization_filename", Config.FASTBASE_SERIALIZATION_FILENAME)
+		FuseBase fuseBase =
+			FuseBase.FuseBaseFactory(
+				parameters.get("fusebase_serialization_filename", Config.FUSEBASE_SERIALIZATION_FILENAME)
 			);
 			
-		FastBaseWebServer fastBaseWebServer =
-			new FastBaseWebServer(
-				fastBase
+		FuseBaseWebServer fuseBaseWebServer =
+			new FuseBaseWebServer(
+				fuseBase
 			);
 		
 		if(!useHttps) {
@@ -200,7 +200,7 @@ public class FastBase implements Serializable {
 			HTTPServer httpServer =
 				new HTTPServer(
 					port,
-					fastBaseWebServer,
+					fuseBaseWebServer,
 					Config.HTTP_SERVER_THREAD_COUNT
 				);
 
@@ -223,7 +223,7 @@ public class FastBase implements Serializable {
 			SecureHTTPServer httpServer =
 				new SecureHTTPServer(
 					port,
-					fastBaseWebServer,
+					fuseBaseWebServer,
 					new FileInputStream(
 						"./ssl/" + sslCertificateFileName
 					),

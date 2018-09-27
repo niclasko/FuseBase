@@ -26,7 +26,7 @@ import java.net.URLEncoder;
 
 	Testing bindings:
 	
-		var queryResults = FastBase.query('UOVDEV', 'select * from dummy');
+		var queryResults = FuseBase.query('UOVDEV', 'select * from dummy');
 
 		output.writeBytes(queryResults);
 
@@ -62,7 +62,7 @@ public class Script implements Serializable {
 		this.scriptBindings = scriptContext.getBindings(ScriptContext.ENGINE_SCOPE);
 		
 		this.scriptBindings.put(
-			"FastBase",
+			"FuseBase",
 			scriptAPI
 		);
 		
@@ -136,7 +136,7 @@ public class Script implements Serializable {
 		Bindings scriptBindings = scriptContext.getBindings(ScriptContext.ENGINE_SCOPE);
 		
 		scriptBindings.put(
-			"FastBase",
+			"FuseBase",
 			scriptAPI
 		);
 		

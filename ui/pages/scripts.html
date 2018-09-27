@@ -3,11 +3,11 @@
 	<div class="col-sm-8">
 		
 		<div class="form-group">
-			<textarea placeholder="Please enter Javascript source code..." class="form-control" onkeydown="processSourceCodeInput(event, this);" ng-model="fastBaseClient.scripts.current.source" rows="11" style="resize: none; margin-bottom: 5px; height: 250px;"></textarea>
+			<textarea placeholder="Please enter Javascript source code..." class="form-control" onkeydown="processSourceCodeInput(event, this);" ng-model="fuseBaseClient.scripts.current.source" rows="11" style="resize: none; margin-bottom: 5px; height: 250px;"></textarea>
 			<div class="form-inline">
-				<button class="btn btn-default" ng-click="fastBaseClient.scripts.runAnonymous(fastBaseClient.scripts.current);" style="margin-right: 5px;">Run</button>
-				<button class="btn btn-default" ng-click="fastBaseClient.scripts.current = {};">Clear</button>
-				<button class="btn btn-default pull-right" data-toggle="modal" data-target="#registerScriptModal" ng-click="fastBaseClient.scripts.new = angular.copy(fastBaseClient.scripts.current);">Register...</button>
+				<button class="btn btn-default" ng-click="fuseBaseClient.scripts.runAnonymous(fuseBaseClient.scripts.current);" style="margin-right: 5px;">Run</button>
+				<button class="btn btn-default" ng-click="fuseBaseClient.scripts.current = {};">Clear</button>
+				<button class="btn btn-default pull-right" data-toggle="modal" data-target="#registerScriptModal" ng-click="fuseBaseClient.scripts.new = angular.copy(fuseBaseClient.scripts.current);">Register...</button>
 			</div>
 		</div>
 		
@@ -17,8 +17,8 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">Registered Scripts</div>
 			<div class="panel-body" style="height: 247px; overflow-y: auto;">
-				<span>{{ (fastBaseClient.scripts.data.length == 0 ? 'No registered scripts.' : '') }}</span>
-				<table class="table" ng-hide="(fastBaseClient.scripts.data.length == 0)">
+				<span>{{ (fuseBaseClient.scripts.data.length == 0 ? 'No registered scripts.' : '') }}</span>
+				<table class="table" ng-hide="(fuseBaseClient.scripts.data.length == 0)">
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -26,12 +26,12 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="s in fastBaseClient.scripts.data">
+						<tr ng-repeat="s in fuseBaseClient.scripts.data">
 							<td>{{ s.name }}</td>
 							<td>
-								<button ng-click="fastBaseClient.scripts.run(s);">Run</button>
-								<button data-toggle="modal" data-target="#editScriptModal" ng-click="fastBaseClient.scripts.getSource(s); fastBaseClient.scripts.edited = s;">Edit...</button>
-								<button ng-click="fastBaseClient.scripts.delete(s);">Delete</button>
+								<button ng-click="fuseBaseClient.scripts.run(s);">Run</button>
+								<button data-toggle="modal" data-target="#editScriptModal" ng-click="fuseBaseClient.scripts.getSource(s); fuseBaseClient.scripts.edited = s;">Edit...</button>
+								<button ng-click="fuseBaseClient.scripts.delete(s);">Delete</button>
 							</td>
 						</tr>
 					</tbody>
@@ -48,7 +48,7 @@
 	<div class="col-sm-8">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				{{ fastBaseClient.scripts.scriptOutput }}
+				{{ fuseBaseClient.scripts.scriptOutput }}
 			</div>
 		</div>
 	</div>
@@ -57,12 +57,12 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				Scheduled Jobs
-				<button ng-click="fastBaseClient.scheduler.newJob = {};" data-toggle="modal" data-target="#registerScheduledJobModal">New...</button>
-				<button ng-click="fastBaseClient.scheduler.list();">Refresh below list</button>
+				<button ng-click="fuseBaseClient.scheduler.newJob = {};" data-toggle="modal" data-target="#registerScheduledJobModal">New...</button>
+				<button ng-click="fuseBaseClient.scheduler.list();">Refresh below list</button>
 			</div>
 			<div class="panel-body" style="height: 247px; overflow-y: auto;">
-				<span>{{ (fastBaseClient.scheduler.data.length == 0 ? 'No scheduled jobs.' : '') }}</span>
-				<table class="table" ng-hide="(fastBaseClient.scheduler.data.length == 0)">
+				<span>{{ (fuseBaseClient.scheduler.data.length == 0 ? 'No scheduled jobs.' : '') }}</span>
+				<table class="table" ng-hide="(fuseBaseClient.scheduler.data.length == 0)">
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -71,13 +71,13 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="sj in fastBaseClient.scheduler.data">
+						<tr ng-repeat="sj in fuseBaseClient.scheduler.data">
 							<td>{{ sj.name }}</td>
 							<td>{{ sj.executionCount }}</td>
 							<td>
-								<button ng-click="fastBaseClient.scheduler.start(sj);" ng-disabled="sj.isScheduled;">Start</button>
-								<button ng-click="fastBaseClient.scheduler.delete(sj);">Delete</button>
-								<button ng-click="fastBaseClient.scheduler.viewLogs(sj);" data-toggle="modal" data-target="#viewLogsModal">Logs...</button>
+								<button ng-click="fuseBaseClient.scheduler.start(sj);" ng-disabled="sj.isScheduled;">Start</button>
+								<button ng-click="fuseBaseClient.scheduler.delete(sj);">Delete</button>
+								<button ng-click="fuseBaseClient.scheduler.viewLogs(sj);" data-toggle="modal" data-target="#viewLogsModal">Logs...</button>
 							</td>
 						</tr>
 					</tbody>
@@ -99,14 +99,14 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="text">Name</label>
-					<input type="text" class="form-control" ng-model="fastBaseClient.scripts.new.name">
+					<input type="text" class="form-control" ng-model="fuseBaseClient.scripts.new.name">
 					<label for="text">Source</label>
-					<textarea placeholder="Please enter Javascript source code..." class="form-control" style="resize: none;" rows="7" ng-model="fastBaseClient.scripts.new.source"></textarea>
+					<textarea placeholder="Please enter Javascript source code..." class="form-control" style="resize: none;" rows="7" ng-model="fuseBaseClient.scripts.new.source"></textarea>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" ng-click="fastBaseClient.scripts.save(fastBaseClient.scripts.new);">Register</button>
+				<button type="button" class="btn btn-primary" ng-click="fuseBaseClient.scripts.save(fuseBaseClient.scripts.new);">Register</button>
 			</div>
 		</div>
 	</div>
@@ -117,17 +117,17 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title">Edit Script <b>{{ fastBaseClient.scripts.edited.name }}</b></h4>
+				<h4 class="modal-title">Edit Script <b>{{ fuseBaseClient.scripts.edited.name }}</b></h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="text">Source</label>
-					<textarea placeholder="Please enter Javascript source code..." class="form-control" style="resize: none;" rows="7" ng-model="fastBaseClient.scripts.edited.source"></textarea>
+					<textarea placeholder="Please enter Javascript source code..." class="form-control" style="resize: none;" rows="7" ng-model="fuseBaseClient.scripts.edited.source"></textarea>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" ng-click="fastBaseClient.scripts.save(fastBaseClient.scripts.edited);">Register</button>
+				<button type="button" class="btn btn-primary" ng-click="fuseBaseClient.scripts.save(fuseBaseClient.scripts.edited);">Register</button>
 			</div>
 		</div>
 	</div>
@@ -143,34 +143,34 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="text">Name</label>
-					<input type="text" class="form-control" ng-model="fastBaseClient.scheduler.newJob.name">
+					<input type="text" class="form-control" ng-model="fuseBaseClient.scheduler.newJob.name">
 					<label for="text">Script</label>
 					<select class="form-control"
-							ng-model="fastBaseClient.scheduler.newJob.scriptName"
-							ng-options="s.name as s.name for s in fastBaseClient.scripts.data">
+							ng-model="fuseBaseClient.scheduler.newJob.scriptName"
+							ng-options="s.name as s.name for s in fuseBaseClient.scripts.data">
 						<option value="" selected disabled>
 							{{ "Please select a script..." }}
 						</option>
 					</select>
 					<label for="text">Job time interval unit</label>
 					<select class="form-control"
-							ng-model="fastBaseClient.scheduler.newJob.timeUnit"
-							ng-options="tu as tu for tu in fastBaseClient.scheduler.timeUnits">
+							ng-model="fuseBaseClient.scheduler.newJob.timeUnit"
+							ng-options="tu as tu for tu in fuseBaseClient.scheduler.timeUnits">
 						<option value="" selected disabled>
 							{{ "Please select time unit..." }}
 						</option>
 					</select>
 					<label for="text">Initial time interval delay before first job execution</label>
-					<input type="text" class="form-control" ng-model="fastBaseClient.scheduler.newJob.initialDelay">
+					<input type="text" class="form-control" ng-model="fuseBaseClient.scheduler.newJob.initialDelay">
 					<label for="text">Time interval between successive job executions</label>
-					<input type="text" class="form-control" ng-model="fastBaseClient.scheduler.newJob.period">
+					<input type="text" class="form-control" ng-model="fuseBaseClient.scheduler.newJob.period">
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-primary"
-					ng-click="fastBaseClient.scheduler.saveJob(fastBaseClient.scheduler.newJob);"
-					ng-disabled="fastBaseClient.scheduler.isJobInvalid(fastBaseClient.scheduler.newJob);">Register</button>
+					ng-click="fuseBaseClient.scheduler.saveJob(fuseBaseClient.scheduler.newJob);"
+					ng-disabled="fuseBaseClient.scheduler.isJobInvalid(fuseBaseClient.scheduler.newJob);">Register</button>
 			</div>
 		</div>
 	</div>
@@ -181,7 +181,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title">Logs for scheduled job <b>{{ fastBaseClient.scheduler.currentJob.name }}</b></h4>
+				<h4 class="modal-title">Logs for scheduled job <b>{{ fuseBaseClient.scheduler.currentJob.name }}</b></h4>
 			</div>
 			<div class="modal-body">
 				
@@ -189,8 +189,8 @@
 					<div class="panel-body" style="height: 247px; overflow-y: auto;">
 						<table class="table">
 							<tbody>
-								<tr ng-repeat="logEntry in fastBaseClient.scheduler.currentJob.logEntries">
-									<td><a href="javascript:void(null)" ng-click="fastBaseClient.scheduler.getLogFile(fastBaseClient.scheduler.currentJob, logEntry);">{{ logEntry.fileName }}</a></td>
+								<tr ng-repeat="logEntry in fuseBaseClient.scheduler.currentJob.logEntries">
+									<td><a href="javascript:void(null)" ng-click="fuseBaseClient.scheduler.getLogFile(fuseBaseClient.scheduler.currentJob, logEntry);">{{ logEntry.fileName }}</a></td>
 								</tr>
 							</tbody>
 						</table>
@@ -199,7 +199,7 @@
 				
 				<div class="panel panel-default">
 					<div class="panel-body">
-						{{ fastBaseClient.scheduler.logFileContents }}
+						{{ fuseBaseClient.scheduler.logFileContents }}
 					</div>
 				</div>
 				

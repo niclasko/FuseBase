@@ -16,27 +16,27 @@
 import java.io.DataOutputStream;
 import java.util.jar.JarFile;
 
-public class FastBaseWebServer implements HttpRequestProcessor {
+public class FuseBaseWebServer implements HttpRequestProcessor {
 	
-	private FastBase fastBase;
-	private FastBaseRESTAPI fastBaseRESTAPI;
+	private FuseBase fuseBase;
+	private FuseBaseRESTAPI fuseBaseRESTAPI;
 	private JarFile currentJarFile;
 	private String[] unrestrictedResourceFilePaths;
 	
-	public FastBaseWebServer(FastBase fastBase) throws Exception {
+	public FuseBaseWebServer(FuseBase fuseBase) throws Exception {
 		
-		this.fastBase = fastBase;
+		this.fuseBase = fuseBase;
 		
-		this.fastBaseRESTAPI =
-			new FastBaseRESTAPI(
-				fastBase
+		this.fuseBaseRESTAPI =
+			new FuseBaseRESTAPI(
+				fuseBase
 			);
 			
 		try {
 			
 			this.currentJarFile =
 				new JarFile(
-					FastBaseRESTAPI.class.getProtectionDomain().getCodeSource().getLocation().getFile()
+					FuseBaseRESTAPI.class.getProtectionDomain().getCodeSource().getLocation().getFile()
 				);
 			
 		} catch(Exception e) {
@@ -59,13 +59,13 @@ public class FastBaseWebServer implements HttpRequestProcessor {
 			httpRequest.getFileName();
 		
 		boolean routeFound =
-			this.fastBaseRESTAPI.hasRoute(
+			this.fuseBaseRESTAPI.hasRoute(
 				fileName
 			);
 		
 		if(routeFound) {
 			
-			this.fastBaseRESTAPI.route(
+			this.fuseBaseRESTAPI.route(
 				fileName,
 				output,
 				httpRequest,
@@ -80,7 +80,7 @@ public class FastBaseWebServer implements HttpRequestProcessor {
 				
 				HttpResponse.redirect(
 					output,
-					Config.FASTBASE_WEB_GUI_DIRECTORY
+					Config.FUSEBASE_WEB_GUI_DIRECTORY
 				);
 				
 				return;
@@ -109,16 +109,16 @@ public class FastBaseWebServer implements HttpRequestProcessor {
 			
 			boolean
 				isFile = HTTPServerThread.isFile(fileName),
-				isResourceFile = this.fastBase.fileManager.isResourceFile(this.currentJarFile, fileName);
+				isResourceFile = this.fuseBase.fileManager.isResourceFile(this.currentJarFile, fileName);
 			
-			// Every access to a fastbase.jar resource file must be authenticated
+			// Every access to a fusebase.jar resource file must be authenticated
 			if(	isResourceFile &&
 				!isUnrestrictedResourceFilePath(fileName) &&
 				!this.isAuthenticated(httpRequest, httpServerThread)	) {
 				
 				HttpResponse.redirect(
 					output,
-					Config.FASTBASE_WEB_LOGIN_PATH
+					Config.FUSEBASE_WEB_LOGIN_PATH
 				);
 				
 				return;
@@ -147,7 +147,7 @@ public class FastBaseWebServer implements HttpRequestProcessor {
 				
 			} else if(isResourceFile) {
 				
-				this.fastBase.fileManager.serveResourceFile(
+				this.fuseBase.fileManager.serveResourceFile(
 					output,
 					this.currentJarFile,
 					fileName,
@@ -183,11 +183,11 @@ public class FastBaseWebServer implements HttpRequestProcessor {
 	private boolean isAuthenticated(HttpRequest httpRequest, HTTPServerThread httpServerThread) {
 		
 		String sessionKey =
-			httpRequest.cookie(Config.FASTBASE_SESSION_KEY_COOKIE_KEYNAME);
+			httpRequest.cookie(Config.FUSEBASE_SESSION_KEY_COOKIE_KEYNAME);
 		
 		if(sessionKey != null) {
 			
-			if(fastBase.userManager.isValidSession(sessionKey, httpServerThread.getClientIPAddress())) {
+			if(fuseBase.userManager.isValidSession(sessionKey, httpServerThread.getClientIPAddress())) {
 				
 				return true;
 				

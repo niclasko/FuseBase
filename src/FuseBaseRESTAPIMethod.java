@@ -15,13 +15,13 @@
  */
 import java.lang.reflect.Method;
 
-public class FastBaseRESTAPIMethod implements Comparable<FastBaseRESTAPIMethod> {
+public class FuseBaseRESTAPIMethod implements Comparable<FuseBaseRESTAPIMethod> {
 	
 	private String apiPath;
 	private Method method;
 	private boolean requiresAuthentication;
 	
-	public FastBaseRESTAPIMethod(	String apiPath,
+	public FuseBaseRESTAPIMethod(	String apiPath,
 									Method method,
 									boolean requiresAuthentication	) {
 		
@@ -43,7 +43,7 @@ public class FastBaseRESTAPIMethod implements Comparable<FastBaseRESTAPIMethod> 
 		return this.requiresAuthentication;
 	}
 	
-	public int compareTo(FastBaseRESTAPIMethod o) {
+	public int compareTo(FuseBaseRESTAPIMethod o) {
 		
 		return this.apiPath.compareTo(o.apiPath());
 		

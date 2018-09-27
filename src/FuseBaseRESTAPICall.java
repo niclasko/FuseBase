@@ -15,14 +15,14 @@
  */
 import java.io.DataOutputStream;
 
-public class FastBaseRESTAPICall {
+public class FuseBaseRESTAPICall {
 	
 	private String jsonCallbackFunction;
 	private DataOutputStream output;
 	private HttpRequest httpRequest;
 	private HTTPServerThread httpServerThread;
 	
-	public FastBaseRESTAPICall(	String jsonCallbackFunction,
+	public FuseBaseRESTAPICall(	String jsonCallbackFunction,
 								DataOutputStream output,
 								HttpRequest httpRequest,
 								HTTPServerThread httpServerThread	) {

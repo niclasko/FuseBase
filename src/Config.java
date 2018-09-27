@@ -15,16 +15,16 @@
  */
 public class Config {
 	public static final int HTTP_PORT = 4444;
-	public static final String FASTBASE_SERIALIZATION_FILENAME = "./db/fastbase.ser";
+	public static final String FUSEBASE_SERIALIZATION_FILENAME = "./db/fusebase.ser";
 	public static final String LOG_DIRECTORY = "./logs/";
 	public static final String APPS_DIRECTORY = "apps";
-	public static final String FASTBASE_WEB_GUI_DIRECTORY = "/ui/";
-	public static final String FASTBASE_WEB_DEFAULT_REDIRECT_TARGET = "/ui/";
-	public static final String FASTBASE_WEB_LOGIN_PATH = "/ui/login/";
+	public static final String FUSEBASE_WEB_GUI_DIRECTORY = "/ui/";
+	public static final String FUSEBASE_WEB_DEFAULT_REDIRECT_TARGET = "/ui/";
+	public static final String FUSEBASE_WEB_LOGIN_PATH = "/ui/login/";
 	public static final String CLOSEFILE = "__CLOSEFILE__";
-	public static final String FASTBASE_SESSION_KEY_COOKIE_KEYNAME = "fastbase_sk";
-	public static final String FASTBASE_SESSION_KEY_PARAMETER_KEYNAME = "fastbase_sk";
-	public static final String FASTBASE_FEEDBACK_COOKIE_KEYNAME = "fastbase_feedback";
+	public static final String FUSEBASE_SESSION_KEY_COOKIE_KEYNAME = "fusebase_sk";
+	public static final String FUSEBASE_SESSION_KEY_PARAMETER_KEYNAME = "fusebase_sk";
+	public static final String FUSEBASE_FEEDBACK_COOKIE_KEYNAME = "fusebase_feedback";
 	public static final int DB_CONNECTION_POOL_SIZE = 5;
 	public static final int HTTP_SERVER_THREAD_COUNT = 20;
 }

@@ -3,7 +3,7 @@
 rm ./classes/*.class
 javac -Xlint:unchecked -source 1.7 -target 1.7 ./src/*.java -d ./classes
 
-rm ./build/fastbase.jar
+rm ./build/fusebase.jar
 
 rm -rf ./build/jdbc_drivers/
 cp -r ./jdbc_drivers ./build/
@@ -16,6 +16,6 @@ cp -r ./ssl ./build/
 
 cd ./classes
 
-jar cvfe ../build/fastbase.jar FastBase ./* ../web/* ../ui/*
+jar cvfe ../build/fusebase.jar FuseBase ./* ../web/* ../ui/*
 
 cd ..

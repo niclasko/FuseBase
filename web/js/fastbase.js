@@ -1,13 +1,13 @@
-var fastBaseTables;
+var fuseBaseTables;
 
-function listFastBaseTables(container) {
+function listFuseBaseTables(container) {
 	container.innerHTML = '';
 	
 	var xhr = new XMLHttpRequest();
 
 	xhr.open(
 		"GET",
-		"/fastbase/tables",
+		"/fusebase/tables",
 		false
 	);
 	xhr.send(null);
@@ -15,7 +15,7 @@ function listFastBaseTables(container) {
 	if(xhr.status === 200) {
 		var json = JSON.parse(xhr.responseText);
 		
-		fastBaseTables = json.data;
+		fuseBaseTables = json.data;
 		
 		var table, column;
 		
@@ -26,9 +26,9 @@ function listFastBaseTables(container) {
 			
 		var tableColumnListId, columnId;
 		
-		for(var i=0; i<fastBaseTables.length; i++) {
+		for(var i=0; i<fuseBaseTables.length; i++) {
 			
-			table = fastBaseTables[i];
+			table = fuseBaseTables[i];
 			
 			tableColumnListId = table.tableName + '_columnList';
 			
@@ -36,7 +36,7 @@ function listFastBaseTables(container) {
 			
 			tableAnchor.href = 'javascript:void(null)';
 			tableAnchor.appendChild(document.createTextNode(table.tableName));
-			tableAnchor.className = 'fastbase_table_link';
+			tableAnchor.className = 'fusebase_table_link';
 			tableAnchor.onclick = (
 				function(id, table) {
 					return function() {
@@ -67,7 +67,7 @@ function listFastBaseTables(container) {
 				
 				columnAnchor.href = 'javascript:void(null)';
 				columnAnchor.appendChild(document.createTextNode(column.columnName));
-				columnAnchor.className = 'fastbase_table_link';
+				columnAnchor.className = 'fusebase_table_link';
 				columnAnchor.onclick = (
 					function(id, table, column) {
 						return function() {
@@ -91,10 +91,10 @@ function listFastBaseTables(container) {
 	}
 }
 
-function fastBaseQuery(sql, outputType, targetElement) {
+function fuseBaseQuery(sql, outputType, targetElement) {
 	var xhr = new XMLHttpRequest();
 	
-	var link = "/fastbase/query?query=" + encodeURIComponent(sql) + "&outputType=" + outputType;
+	var link = "/fusebase/query?query=" + encodeURIComponent(sql) + "&outputType=" + outputType;
 	
 	xhr.open(
 		"GET",
@@ -138,7 +138,7 @@ function createAddTableDialog(event, cleanup) {
 	
 	createDialog(
 		'New table',
-		'<iframe src="fastbaseupload/" class="iFrame" style="height: 92%;"></iframe>',
+		'<iframe src="fusebaseupload/" class="iFrame" style="height: 92%;"></iframe>',
 		cc.x,
 		cc.y,
 		840,

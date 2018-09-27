@@ -3,27 +3,27 @@
 	<div class="col-sm-8">
 		
 		<div class="form-group">
-			<textarea placeholder="Please enter query..." class="form-control" ng-model="fastBaseClient.queries.current.query" rows="11" style="resize: none; margin-bottom: 5px; height: 250px;"></textarea>
+			<textarea placeholder="Please enter query..." class="form-control" ng-model="fuseBaseClient.queries.current.query" rows="11" style="resize: none; margin-bottom: 5px; height: 250px;"></textarea>
 			<div class="form-inline">
 				<select class="form-control"
 						style="width: auto; margin-right: 5px;"
-						ng-model="fastBaseClient.queries.current.connectionName"
-						ng-options="c.connectionName as c.connectionName for c in fastBaseClient.connections.data">
+						ng-model="fuseBaseClient.queries.current.connectionName"
+						ng-options="c.connectionName as c.connectionName for c in fuseBaseClient.connections.data">
 					<option value="" selected disabled>
-						{{ fastBaseClient.connections.dataDefault }}
+						{{ fuseBaseClient.connections.dataDefault }}
 					</option>
 				</select>
 				<select class="form-control"
 						style="width: auto; margin-right: 5px;"
-						ng-model="fastBaseClient.queries.current.queryType"
-						ng-options="o as o for o in fastBaseClient.queries.queryTypes">
+						ng-model="fuseBaseClient.queries.current.queryType"
+						ng-options="o as o for o in fuseBaseClient.queries.queryTypes">
 					<option value="" selected disabled>
 						Query Type
 					</option>
 				</select>
-				<button class="btn btn-default" ng-click="fastBaseClient.queries.runQuery(fastBaseClient.queries.current);" style="margin-right: 5px;">Run</button>
-				<button class="btn btn-default" ng-click="fastBaseClient.queries.clearCurrent();">Clear</button>
-				<button class="btn btn-default pull-right" data-toggle="modal" data-target="#registerQueryModal" ng-click="fastBaseClient.queries.new = angular.copy(fastBaseClient.queries.current);">Register...</button>
+				<button class="btn btn-default" ng-click="fuseBaseClient.queries.runQuery(fuseBaseClient.queries.current);" style="margin-right: 5px;">Run</button>
+				<button class="btn btn-default" ng-click="fuseBaseClient.queries.clearCurrent();">Clear</button>
+				<button class="btn btn-default pull-right" data-toggle="modal" data-target="#registerQueryModal" ng-click="fuseBaseClient.queries.new = angular.copy(fuseBaseClient.queries.current);">Register...</button>
 				
 			</div>
 		</div>
@@ -34,8 +34,8 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">Registered Queries</div>
 			<div class="panel-body" style="height: 247px; overflow-y: auto;">
-				<span>{{ (fastBaseClient.queries.data.length == 0 ? 'No registered queries.' : '') }}</span>
-				<table class="table" ng-hide="(fastBaseClient.queries.data.length == 0)">
+				<span>{{ (fuseBaseClient.queries.data.length == 0 ? 'No registered queries.' : '') }}</span>
+				<table class="table" ng-hide="(fuseBaseClient.queries.data.length == 0)">
 					<thead>
 						<tr>
 							<th>Query Id</td>
@@ -43,19 +43,19 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="q in fastBaseClient.queries.data">
+						<tr ng-repeat="q in fuseBaseClient.queries.data">
 							<td>{{ q.queryId }}</td>
 							<td>
-								<button data-toggle="modal" data-target="#registerQueryModal" ng-click="fastBaseClient.queries.new = angular.copy(q);">Edit</button>
-								<button ng-click="fastBaseClient.queries.delete(q);">Delete</button>
+								<button data-toggle="modal" data-target="#registerQueryModal" ng-click="fuseBaseClient.queries.new = angular.copy(q);">Edit</button>
+								<button ng-click="fuseBaseClient.queries.delete(q);">Delete</button>
 								<div class="btn-group">
 									<button class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										Run<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" style="min-width: 0px;">
-										<li><a href="javascript:void(null)" ng-click="fastBaseClient.queries.runRegisteredQuery(q);" class="small">Here</a></li>
-										<li><a href="/connections/registeredquery?{{ fastBaseClient.buildQueryString(q, {'$$hashKey': '', 'query': ''}) }}" target="_blank" class="small">JSON</a></li>
-										<li><a href="/connections/registeredquery?{{ fastBaseClient.buildQueryString(q, {'$$hashKey': '', 'query': ''}) }}&outputType=CSV" target="_blank" class="small">CSV</a>
+										<li><a href="javascript:void(null)" ng-click="fuseBaseClient.queries.runRegisteredQuery(q);" class="small">Here</a></li>
+										<li><a href="/connections/registeredquery?{{ fuseBaseClient.buildQueryString(q, {'$$hashKey': '', 'query': ''}) }}" target="_blank" class="small">JSON</a></li>
+										<li><a href="/connections/registeredquery?{{ fuseBaseClient.buildQueryString(q, {'$$hashKey': '', 'query': ''}) }}&outputType=CSV" target="_blank" class="small">CSV</a>
 									</ul>
 								</div>
 							</td>
@@ -75,13 +75,13 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th ng-repeat="(key, value) in fastBaseClient.queries.queryResults[0]">
+					<th ng-repeat="(key, value) in fuseBaseClient.queries.queryResults[0]">
 						{{ key }}
 					</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="row in fastBaseClient.queries.queryResults">
+				<tr ng-repeat="row in fuseBaseClient.queries.queryResults">
 					<td ng-repeat="(key, value) in row">{{ value }}</td>
 				</tr>
 			</tbody>
@@ -101,22 +101,22 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="text">Query Id</label>
-					<input type="text" class="form-control" ng-model="fastBaseClient.queries.new.queryId">
+					<input type="text" class="form-control" ng-model="fuseBaseClient.queries.new.queryId">
 					<label for="text">Connection</label>
 					<select class="form-control"
-							ng-model="fastBaseClient.queries.new.connectionName"
-							ng-options="c.connectionName as c.connectionName for c in fastBaseClient.connections.data">
+							ng-model="fuseBaseClient.queries.new.connectionName"
+							ng-options="c.connectionName as c.connectionName for c in fuseBaseClient.connections.data">
 						<option value="" selected disabled>
-							{{ fastBaseClient.connections.dataDefault }}
+							{{ fuseBaseClient.connections.dataDefault }}
 						</option>
 					</select>
 					<label for="text">Query</label>
-					<textarea placeholder="Please enter query..." class="form-control" style="resize: none;" rows="7" ng-model="fastBaseClient.queries.new.query"></textarea>
+					<textarea placeholder="Please enter query..." class="form-control" style="resize: none;" rows="7" ng-model="fuseBaseClient.queries.new.query"></textarea>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" ng-click="fastBaseClient.queries.registerQuery($event, fastBaseClient.queries.new);">Register</button>
+				<button type="button" class="btn btn-primary" ng-click="fuseBaseClient.queries.registerQuery($event, fuseBaseClient.queries.new);">Register</button>
 			</div>
 		</div>
 	</div>

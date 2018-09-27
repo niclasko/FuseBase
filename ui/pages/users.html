@@ -2,7 +2,7 @@
 	<div class="col-sm-12">
 		<div>
 			<h4 style="float: left">Users</h4>&nbsp;
-			<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#newUserModal" ng-click="fastBaseClient.users.newUser();">New User...</button>
+			<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#newUserModal" ng-click="fuseBaseClient.users.newUser();">New User...</button>
 		</div>
 		<table class="table table-striped">
 			<thead>
@@ -14,15 +14,15 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="u in fastBaseClient.users.data">
+				<tr ng-repeat="u in fuseBaseClient.users.data">
 					<td>{{ u.username }}</td>
 					<td><span ng-repeat="role in u.roles">{{ role }}<br></span></td>
 					<td><span ng-repeat="privilege in u.privileges">{{ privilege }}<br></span></td>
 					<td>
-						<button ng-click="fastBaseClient.users.editRolesAndPrivileges(u);" data-target="#userRolesAndPrivilegesModal" data-toggle="modal" ng-disabled="{{ u.unchangeable  }}">Roles &amp; Privileges...</button>
-						<button ng-click="fastBaseClient.users.setCurrent(u); fastBaseClient.users.getClientKeys(u);" data-target="#editUserClientKeysModal" data-toggle="modal">Client Keys...</button>
-						<button ng-click="fastBaseClient.users.editPassword(u);" data-target="#userPasswordModal" data-toggle="modal">Change Password...</button>
-						<button ng-click="fastBaseClient.users.delete(u);" ng-disabled="{{ u.undeleteable  }}">Delete</button>
+						<button ng-click="fuseBaseClient.users.editRolesAndPrivileges(u);" data-target="#userRolesAndPrivilegesModal" data-toggle="modal" ng-disabled="{{ u.unchangeable  }}">Roles &amp; Privileges...</button>
+						<button ng-click="fuseBaseClient.users.setCurrent(u); fuseBaseClient.users.getClientKeys(u);" data-target="#editUserClientKeysModal" data-toggle="modal">Client Keys...</button>
+						<button ng-click="fuseBaseClient.users.editPassword(u);" data-target="#userPasswordModal" data-toggle="modal">Change Password...</button>
+						<button ng-click="fuseBaseClient.users.delete(u);" ng-disabled="{{ u.undeleteable  }}">Delete</button>
 					</td>
 				</tr>
 			</tbody>
@@ -33,7 +33,7 @@
 	<div class="col-sm-12">
 		<div>
 			<h4 style="float: left">Roles</h4>&nbsp;
-			<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#newRoleModal" ng-click="fastBaseClient.roles.newRole();">New Role...</button>
+			<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#newRoleModal" ng-click="fuseBaseClient.roles.newRole();">New Role...</button>
 		</div>
 		<table class="table table-striped">
 			<thead>
@@ -45,13 +45,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="r in fastBaseClient.roles.data">
+				<tr ng-repeat="r in fuseBaseClient.roles.data">
 					<td>{{ r.name }}</td>
 					<td>{{ r.roleType }}</td>
 					<td><span ng-repeat="privilege in r.privileges">{{ privilege }}<br></span></td>
 					<td>
-						<button ng-click="fastBaseClient.roles.editPrivileges(r);" data-target="#updateRolePrivilegesModal" data-toggle="modal" ng-disabled="{{ r.unchangeable  }}">Privileges...</button>
-						<button ng-click="fastBaseClient.roles.delete(r);" ng-disabled="{{ r.undeleteable  }}">Delete</button>
+						<button ng-click="fuseBaseClient.roles.editPrivileges(r);" data-target="#updateRolePrivilegesModal" data-toggle="modal" ng-disabled="{{ r.unchangeable  }}">Privileges...</button>
+						<button ng-click="fuseBaseClient.roles.delete(r);" ng-disabled="{{ r.undeleteable  }}">Delete</button>
 					</td>
 				</tr>
 			</tbody>
@@ -64,7 +64,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title">Roles &amp; Privileges for <b>{{ fastBaseClient.users.current.username }}</b></h4>
+				<h4 class="modal-title">Roles &amp; Privileges for <b>{{ fuseBaseClient.users.current.username }}</b></h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
@@ -73,8 +73,8 @@
 							<div class="panel panel-default">
 								<div class="panel-heading"><label for="checkbox">Roles</label></div>
 								<div class="panel-body" style="height: 150px; overflow-y: auto;">
-									<div class="checkbox" ng-repeat="r in fastBaseClient.roles.data">
-									  <label><input type="checkbox" ng-model="fastBaseClient.users.current.addedRoles[r.name]" value="{{ r.name }}">{{ r.name }}</label>
+									<div class="checkbox" ng-repeat="r in fuseBaseClient.roles.data">
+									  <label><input type="checkbox" ng-model="fuseBaseClient.users.current.addedRoles[r.name]" value="{{ r.name }}">{{ r.name }}</label>
 									</div>
 								</div>
 							</div>
@@ -83,8 +83,8 @@
 							<div class="panel panel-default">
 								<div class="panel-heading"><label for="checkbox">Privileges</label></div>
 								<div class="panel-body" style="height: 150px; overflow-y: auto;">
-									<div class="checkbox" ng-repeat="privilege in fastBaseClient.users.privileges">
-									  <label><input type="checkbox" ng-model="fastBaseClient.users.current.addedPrivileges[privilege]" value="{{ privilege }}">{{ privilege }}</label>
+									<div class="checkbox" ng-repeat="privilege in fuseBaseClient.users.privileges">
+									  <label><input type="checkbox" ng-model="fuseBaseClient.users.current.addedPrivileges[privilege]" value="{{ privilege }}">{{ privilege }}</label>
 									</div>
 								</div>
 							</div>
@@ -94,7 +94,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" ng-click="fastBaseClient.users.updateUserPriviligesAndRoles(fastBaseClient.users.current);">Save</button>
+				<button type="button" class="btn btn-primary" ng-click="fuseBaseClient.users.updateUserPriviligesAndRoles(fuseBaseClient.users.current);">Save</button>
 			</div>
 		</div>
 	</div>
@@ -105,25 +105,25 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title">Change Password for <b>{{ fastBaseClient.users.current.username }}</b></h4>
+				<h4 class="modal-title">Change Password for <b>{{ fuseBaseClient.users.current.username }}</b></h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="text">Old Password</label>
-					<input type="password" class="form-control" ng-model="fastBaseClient.users.current.old_password">
+					<input type="password" class="form-control" ng-model="fuseBaseClient.users.current.old_password">
 					<label for="text">Repeat Old Password</label>
-					<div class="form-group {{ (fastBaseClient.users.current.old_password.length > 0 ? 'has-feedback' + (fastBaseClient.users.passwordsMatch() ? ' has-success' : ' has-error') : '')}}">
-						<input type="password" class="form-control" ng-model="fastBaseClient.users.current.old_password_repeated" aria-describedby="passwordMatchStatus">
-						<span class="glyphicon glyphicon-{{ (fastBaseClient.users.passwordsMatch() ? 'ok' : 'remove') }} form-control-feedback" aria-hidden="true" style="display: {{ (fastBaseClient.users.current.old_password.length > 0 ? 'block' : 'none') }}"></span>
+					<div class="form-group {{ (fuseBaseClient.users.current.old_password.length > 0 ? 'has-feedback' + (fuseBaseClient.users.passwordsMatch() ? ' has-success' : ' has-error') : '')}}">
+						<input type="password" class="form-control" ng-model="fuseBaseClient.users.current.old_password_repeated" aria-describedby="passwordMatchStatus">
+						<span class="glyphicon glyphicon-{{ (fuseBaseClient.users.passwordsMatch() ? 'ok' : 'remove') }} form-control-feedback" aria-hidden="true" style="display: {{ (fuseBaseClient.users.current.old_password.length > 0 ? 'block' : 'none') }}"></span>
 						<span id="passwordMatchStatus" class="sr-only"></span>
 					</div>
 					<label for="text">New Password</label>
-					<input type="password" class="form-control" ng-model="fastBaseClient.users.current.new_password">
+					<input type="password" class="form-control" ng-model="fuseBaseClient.users.current.new_password">
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" ng-disabled="fastBaseClient.users.changePasswordInputIsInvalid()" ng-click="fastBaseClient.users.changePasswordForCurrent();">Change Password</button>
+				<button type="button" class="btn btn-primary" ng-disabled="fuseBaseClient.users.changePasswordInputIsInvalid()" ng-click="fuseBaseClient.users.changePasswordForCurrent();">Change Password</button>
 			</div>
 		</div>
 	</div>
@@ -139,14 +139,14 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="text">Username</label>
-					<input type="text" class="form-control" ng-model="fastBaseClient.users.new.username">
+					<input type="text" class="form-control" ng-model="fuseBaseClient.users.new.username">
 					<div class="form-group">
 						<label for="text">Password</label>
-						<input type="password" class="form-control" ng-model="fastBaseClient.users.new.password">
+						<input type="password" class="form-control" ng-model="fuseBaseClient.users.new.password">
 						<label for="text">Repeat Password</label>
-						<div class="form-group {{ (fastBaseClient.users.new.password.length > 0 ? 'has-feedback' + (fastBaseClient.users.passwordsMatchForNewUser() ? ' has-success' : ' has-error') : '')}}">
-							<input type="password" class="form-control" ng-model="fastBaseClient.users.new.password_repeated" aria-describedby="passwordForNewUserMatchStatus">
-							<span class="glyphicon glyphicon-{{ (fastBaseClient.users.passwordsMatchForNewUser() ? 'ok' : 'remove') }} form-control-feedback" aria-hidden="true" style="display: {{ (fastBaseClient.users.new.password.length > 0 ? 'block' : 'none') }}"></span>
+						<div class="form-group {{ (fuseBaseClient.users.new.password.length > 0 ? 'has-feedback' + (fuseBaseClient.users.passwordsMatchForNewUser() ? ' has-success' : ' has-error') : '')}}">
+							<input type="password" class="form-control" ng-model="fuseBaseClient.users.new.password_repeated" aria-describedby="passwordForNewUserMatchStatus">
+							<span class="glyphicon glyphicon-{{ (fuseBaseClient.users.passwordsMatchForNewUser() ? 'ok' : 'remove') }} form-control-feedback" aria-hidden="true" style="display: {{ (fuseBaseClient.users.new.password.length > 0 ? 'block' : 'none') }}"></span>
 							<span id="passwordForNewUserMatchStatus" class="sr-only"></span>
 						</div>
 					</div>
@@ -155,8 +155,8 @@
 							<div class="panel panel-default">
 								<div class="panel-heading"><label for="checkbox">Roles</label></div>
 								<div class="panel-body" style="height: 150px; overflow-y: auto;">
-									<div class="checkbox" ng-repeat="r in fastBaseClient.roles.data">
-									  <label><input type="checkbox" ng-model="fastBaseClient.users.new.addedRoles[r.name]" value="{{ r.name }}">{{ r.name }}</label>
+									<div class="checkbox" ng-repeat="r in fuseBaseClient.roles.data">
+									  <label><input type="checkbox" ng-model="fuseBaseClient.users.new.addedRoles[r.name]" value="{{ r.name }}">{{ r.name }}</label>
 									</div>
 								</div>
 							</div>
@@ -165,8 +165,8 @@
 							<div class="panel panel-default">
 								<div class="panel-heading"><label for="checkbox">Privileges</label></div>
 								<div class="panel-body" style="height: 150px; overflow-y: auto;">
-									<div class="checkbox" ng-repeat="privilege in fastBaseClient.users.privileges">
-									  <label><input type="checkbox" ng-model="fastBaseClient.users.new.addedPrivileges[privilege]" value="{{ privilege }}">{{ privilege }}</label>
+									<div class="checkbox" ng-repeat="privilege in fuseBaseClient.users.privileges">
+									  <label><input type="checkbox" ng-model="fuseBaseClient.users.new.addedPrivileges[privilege]" value="{{ privilege }}">{{ privilege }}</label>
 									</div>
 								</div>
 							</div>
@@ -176,7 +176,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" ng-disabled="fastBaseClient.users.userIsInvalid(fastBaseClient.users.new)" ng-click="fastBaseClient.users.saveNewUser(fastBaseClient.users.new);">Add User</button>
+				<button type="button" class="btn btn-primary" ng-disabled="fuseBaseClient.users.userIsInvalid(fuseBaseClient.users.new)" ng-click="fuseBaseClient.users.saveNewUser(fuseBaseClient.users.new);">Add User</button>
 			</div>
 		</div>
 	</div>
@@ -192,13 +192,13 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="text">Name</label>
-					<input type="text" class="form-control" ng-model="fastBaseClient.roles.new.name">
+					<input type="text" class="form-control" ng-model="fuseBaseClient.roles.new.name">
 					<div class="row" style="margin-top: 10px;">
 						<div class="col-sm-6">
 							<label for="text">Type</label>
 							<select class="form-control"
-									ng-model="fastBaseClient.roles.new.roleType"
-									ng-options="roleType as roleType for roleType in fastBaseClient.roles.roleTypes">
+									ng-model="fuseBaseClient.roles.new.roleType"
+									ng-options="roleType as roleType for roleType in fuseBaseClient.roles.roleTypes">
 								<option value="" selected disabled>
 									Please select a role type...
 								</option>
@@ -208,8 +208,8 @@
 							<div class="panel panel-default">
 								<div class="panel-heading"><label for="checkbox">Privileges</label></div>
 								<div class="panel-body" style="height: 150px; overflow-y: auto;">
-									<div class="checkbox" ng-repeat="privilege in fastBaseClient.users.privileges">
-									  <label><input type="checkbox" ng-model="fastBaseClient.roles.new.addedPrivileges[privilege]" value="{{ privilege }}">{{ privilege }}</label>
+									<div class="checkbox" ng-repeat="privilege in fuseBaseClient.users.privileges">
+									  <label><input type="checkbox" ng-model="fuseBaseClient.roles.new.addedPrivileges[privilege]" value="{{ privilege }}">{{ privilege }}</label>
 									</div>
 								</div>
 							</div>
@@ -219,7 +219,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" ng-disabled="!fastBaseClient.roles.validRole(fastBaseClient.roles.new);" ng-click="fastBaseClient.roles.saveRole(fastBaseClient.roles.new);">Add Role</button>
+				<button type="button" class="btn btn-primary" ng-disabled="!fuseBaseClient.roles.validRole(fuseBaseClient.roles.new);" ng-click="fuseBaseClient.roles.saveRole(fuseBaseClient.roles.new);">Add Role</button>
 			</div>
 		</div>
 	</div>
@@ -230,7 +230,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title">Update privileges for role <b>{{ fastBaseClient.roles.current.name }}</b></h4>
+				<h4 class="modal-title">Update privileges for role <b>{{ fuseBaseClient.roles.current.name }}</b></h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
@@ -238,8 +238,8 @@
 					<div class="panel panel-default">
 						<div class="panel-heading"><label for="checkbox">Privileges</label></div>
 						<div class="panel-body" style="height: 150px; overflow-y: auto;">
-							<div class="checkbox" ng-repeat="privilege in fastBaseClient.users.privileges">
-							  <label><input type="checkbox" ng-model="fastBaseClient.roles.current.addedPrivileges[privilege]" value="{{ privilege }}">{{ privilege }}</label>
+							<div class="checkbox" ng-repeat="privilege in fuseBaseClient.users.privileges">
+							  <label><input type="checkbox" ng-model="fuseBaseClient.roles.current.addedPrivileges[privilege]" value="{{ privilege }}">{{ privilege }}</label>
 							</div>
 						</div>
 					</div>
@@ -248,7 +248,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" ng-click="fastBaseClient.roles.updateRolePrivileges(fastBaseClient.roles.current);">Update Role</button>
+				<button type="button" class="btn btn-primary" ng-click="fuseBaseClient.roles.updateRolePrivileges(fuseBaseClient.roles.current);">Update Role</button>
 			</div>
 		</div>
 	</div>
@@ -259,20 +259,20 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title">Edit client keys for <b>{{ fastBaseClient.users.current.username }}</b></h4>
+				<h4 class="modal-title">Edit client keys for <b>{{ fuseBaseClient.users.current.username }}</b></h4>
 			</div>
 			<div class="modal-body">
 				
 				<div>
-					<button ng-click="fastBaseClient.users.generateClientKey(fastBaseClient.users.current);">Generate client key</button>
-					<button ng-click="fastBaseClient.users.deleteAllClientKeys(fastBaseClient.users.current);" style="{{ (fastBaseClient.users.current.clientKeys.length == 0 ? 'display: none;' : ''); }}">Delete all client keys...</button>
+					<button ng-click="fuseBaseClient.users.generateClientKey(fuseBaseClient.users.current);">Generate client key</button>
+					<button ng-click="fuseBaseClient.users.deleteAllClientKeys(fuseBaseClient.users.current);" style="{{ (fuseBaseClient.users.current.clientKeys.length == 0 ? 'display: none;' : ''); }}">Delete all client keys...</button>
 				</div>
 				
-				<div style="{{ (fastBaseClient.users.current.clientKeys.length > 0 ? 'display: none;' : ''); }}">
+				<div style="{{ (fuseBaseClient.users.current.clientKeys.length > 0 ? 'display: none;' : ''); }}">
 					No registered client keys for user.
 				</div>
 				
-				<table class="table table-striped" style="{{ (fastBaseClient.users.current.clientKeys.length == 0 ? 'display: none;' : ''); }}">
+				<table class="table table-striped" style="{{ (fuseBaseClient.users.current.clientKeys.length == 0 ? 'display: none;' : ''); }}">
 					<thead>
 						<tr>
 							<th>Client Key</th>
@@ -280,12 +280,12 @@
 							<th>Action</th>
 						</tr>
 					</thead>
-					<tbody><!-- fastBaseClient.users.getClientKeyAuthenticationLink(ck) -->
-						<tr ng-repeat="ck in fastBaseClient.users.current.clientKeys">
+					<tbody><!-- fuseBaseClient.users.getClientKeyAuthenticationLink(ck) -->
+						<tr ng-repeat="ck in fuseBaseClient.users.current.clientKeys">
 							<td>{{ ck }}</td>
-							<td>{{ fastBaseClient.currentURL() + '/clientkey/authenticate?clientKey=' + ck + '&outputType=JSON' }}</td>
+							<td>{{ fuseBaseClient.currentURL() + '/clientkey/authenticate?clientKey=' + ck + '&outputType=JSON' }}</td>
 							<td>
-								<button ng-click="fastBaseClient.users.deleteClientKey(fastBaseClient.users.current, ck);">Delete...</button>
+								<button ng-click="fuseBaseClient.users.deleteClientKey(fuseBaseClient.users.current, ck);">Delete...</button>
 							</td>
 						</tr>
 					</tbody>

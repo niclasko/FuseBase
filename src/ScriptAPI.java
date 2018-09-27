@@ -38,10 +38,10 @@ import java.util.List;
 
 public class ScriptAPI implements Serializable {
 	
-	private FastBase fastBase;
+	private FuseBase fuseBase;
 	
-	public ScriptAPI(FastBase fastBase) {
-		this.fastBase = fastBase;
+	public ScriptAPI(FuseBase fuseBase) {
+		this.fuseBase = fuseBase;
 	}
 	
 	public QueryObject getQueryObject(String connectionName, String query) {
@@ -49,7 +49,7 @@ public class ScriptAPI implements Serializable {
 		try {
 			
 			return
-				this.fastBase.queryManager.getQueryObject(
+				this.fuseBase.queryManager.getQueryObject(
 					connectionName,
 					query
 				);
@@ -69,7 +69,7 @@ public class ScriptAPI implements Serializable {
 			PersistedPrintWriter persistedPrintWriter = new PersistedPrintWriter();
 			DataWriter dataWriter = new JSONWriter(persistedPrintWriter);
 			
-			this.fastBase.queryManager.sql(
+			this.fuseBase.queryManager.sql(
 				dataWriter,
 				connectionName,
 				query
@@ -137,7 +137,7 @@ public class ScriptAPI implements Serializable {
 				
 			jb.$('{');
 			
-			jb.k("FastBaseQueries").$('[');
+			jb.k("FuseBaseQueries").$('[');
 				
 			for(SQLParseTreeNode qNode : qNodes) {
 				
@@ -299,7 +299,7 @@ public class ScriptAPI implements Serializable {
 			
 		}
 		
-		this.fastBase.queryManager.sql(
+		this.fuseBase.queryManager.sql(
 			dataWriter,
 			connectionName,
 			query
@@ -343,7 +343,7 @@ public class ScriptAPI implements Serializable {
 		
 		try {
 			
-			int ddlStatus = this.fastBase.queryManager.ddl(connectionName, ddl);
+			int ddlStatus = this.fuseBase.queryManager.ddl(connectionName, ddl);
 				
 			return this.success("DDL status: " + ddlStatus);
 			
@@ -359,7 +359,7 @@ public class ScriptAPI implements Serializable {
 		
 		try {
 			
-			int recordCount = this.fastBase.queryManager.dml(connectionName, dml);
+			int recordCount = this.fuseBase.queryManager.dml(connectionName, dml);
 				
 			return this.success(recordCount + " rows affected.");
 			
@@ -376,7 +376,7 @@ public class ScriptAPI implements Serializable {
 		try {
 				
 			return
-				this.fastBase.queryManager.getPreparedStatement(
+				this.fuseBase.queryManager.getPreparedStatement(
 					connectionName,
 					query
 				);
@@ -394,7 +394,7 @@ public class ScriptAPI implements Serializable {
 		try {
 				
 			return
-				this.fastBase.queryManager.getCallableStatement(
+				this.fuseBase.queryManager.getCallableStatement(
 					connectionName,
 					query
 				);
@@ -565,7 +565,7 @@ public class ScriptAPI implements Serializable {
 		try {
 			
 			Script script =
-				this.fastBase.scriptManager.getScript(scriptName);
+				this.fuseBase.scriptManager.getScript(scriptName);
 				
 			script.init(this);
 			
@@ -586,7 +586,7 @@ public class ScriptAPI implements Serializable {
 		try {
 			
 			Script script =
-				this.fastBase.scriptManager.getScript(scriptName);
+				this.fuseBase.scriptManager.getScript(scriptName);
 				
 			String[][] parameters =
 				new String[scriptParameters.entrySet().size()][2];

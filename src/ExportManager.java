@@ -20,10 +20,10 @@ public class ExportManager {
 			'0','j','l','k','l','2','1','3','4','n','z','3','3','f','e','7'
 		};
 	
-	private FastBase fastBase;
+	private FuseBase fuseBase;
 	
-	public ExportManager(FastBase fastBase) {
-		this.fastBase = fastBase;
+	public ExportManager(FuseBase fuseBase) {
+		this.fuseBase = fuseBase;
 	}
 	
 	public byte[] exportAll() throws Exception {
@@ -34,25 +34,25 @@ public class ExportManager {
 		exportJSON
 			.$('{')
 				.k("connections").v(
-					this.fastBase.dbConnectionManager.getJSONBuilderForExport()
+					this.fuseBase.dbConnectionManager.getJSONBuilderForExport()
 				)
 				.k("queries").v(
-					this.fastBase.queryManager.getJSONBuilder()
+					this.fuseBase.queryManager.getJSONBuilder()
 				)
 				.k("scripts").v(
-					this.fastBase.scriptManager.getJSONBuilderForExport()
+					this.fuseBase.scriptManager.getJSONBuilderForExport()
 				)
 				.k("scheduledJobs").v(
-					this.fastBase.scheduler().getJSONBuilderForExport()
+					this.fuseBase.scheduler().getJSONBuilderForExport()
 				)
 				.k("roles").v(
-					this.fastBase.userManager.getRolesJSONBuilderForExport()
+					this.fuseBase.userManager.getRolesJSONBuilderForExport()
 				)
 				.k("users").v(
-					this.fastBase.userManager.getJSONBuilderForExport()
+					this.fuseBase.userManager.getJSONBuilderForExport()
 				)
 				.k("clientKeys").v(
-					this.fastBase.userManager.getClientKeysJSONBuilderForExport()
+					this.fuseBase.userManager.getClientKeysJSONBuilderForExport()
 				)
 			.$('}');
 		
@@ -82,7 +82,7 @@ public class ExportManager {
 			
 			for(JSONKeyValue entry : ((JSONDataStructure)json.get("connections").getValue()).entries()) {
 
-				this.fastBase.dbConnectionManager.addConnection(
+				this.fuseBase.dbConnectionManager.addConnection(
 					(JSONDataStructure)entry.getValue()
 				);
 
@@ -94,7 +94,7 @@ public class ExportManager {
 			
 			for(JSONKeyValue entry : ((JSONDataStructure)json.get("queries").getValue()).entries()) {
 
-				this.fastBase.queryManager.addQuery(
+				this.fuseBase.queryManager.addQuery(
 					(JSONDataStructure)entry.getValue()
 				);
 
@@ -106,7 +106,7 @@ public class ExportManager {
 			
 			for(JSONKeyValue entry : ((JSONDataStructure)json.get("scripts").getValue()).entries()) {
 
-				this.fastBase.scriptManager.addScript(
+				this.fuseBase.scriptManager.addScript(
 					(JSONDataStructure)entry.getValue()
 				);
 
@@ -118,9 +118,9 @@ public class ExportManager {
 			
 			for(JSONKeyValue entry : ((JSONDataStructure)json.get("scheduledJobs").getValue()).entries()) {
 
-				this.fastBase.scheduler().addJob(
+				this.fuseBase.scheduler().addJob(
 					(JSONDataStructure)entry.getValue(),
-					this.fastBase.scriptManager
+					this.fuseBase.scriptManager
 				);
 
 			}
@@ -131,7 +131,7 @@ public class ExportManager {
 			
 			for(JSONKeyValue entry : ((JSONDataStructure)json.get("roles").getValue()).entries()) {
 				
-				this.fastBase.userManager.addRole(
+				this.fuseBase.userManager.addRole(
 					(JSONDataStructure)entry.getValue()
 				);
 
@@ -143,7 +143,7 @@ public class ExportManager {
 			
 			for(JSONKeyValue entry : ((JSONDataStructure)json.get("users").getValue()).entries()) {
 				
-				this.fastBase.userManager.addUser(
+				this.fuseBase.userManager.addUser(
 					(JSONDataStructure)entry.getValue()
 				);
 
@@ -155,7 +155,7 @@ public class ExportManager {
 			
 			for(JSONKeyValue entry : ((JSONDataStructure)json.get("clientKeys").getValue()).entries()) {
 				
-				this.fastBase.userManager.addUserClientKeys(
+				this.fuseBase.userManager.addUserClientKeys(
 					(JSONDataStructure)entry.getValue()
 				);
 

@@ -5,10 +5,10 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-		<meta name="description" content="FastBase login">
+		<meta name="description" content="FuseBase login">
 		<meta name="author" content="Niclas Kjäll-Ohlsson">
 
-		<title>FastBase Login</title>
+		<title>FuseBase Login</title>
 		
 		<link rel="stylesheet" type="text/css" href="/web/css/styles.css">
 		<link rel="stylesheet" type="text/css" href="/web/css/bootstrap.min.css">
@@ -37,12 +37,12 @@
 				return href.substr(start, end);
 			}
 		
-			function eraseFastBaseSK() {
+			function eraseFuseBaseSK() {
 				document.cookie =
-					"fastbase_sk=not_valid; Path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=" + getHostName();
+					"fusebase_sk=not_valid; Path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=" + getHostName();
 				}
 			
-			function FastBaseLogin() {
+			function FuseBaseLogin() {
 				
 				var xhr = new XMLHttpRequest();
 				
@@ -77,13 +77,13 @@
 		</script>
 
 	</head>
-	<body onload="eraseFastBaseSK();">
+	<body onload="eraseFuseBaseSK();">
 		<div class="container">
 			
 			<div class="row">
 				
 				<div class="form-signin">
-					<h2 class="form-signin-heading">FastBase Login</h2>
+					<h2 class="form-signin-heading">FuseBase Login</h2>
 					<label for="username" class="sr-only">Username</label>
 					<input type="username" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
 					<label for="password" class="sr-only">Password</label>
@@ -94,7 +94,7 @@
 							<span id="feedback" style="font-size: x-small; font-weight: bold; color: red;"></span>
 						</label>
 					</div>
-					<button class="btn btn-lg btn-primary btn-block" onclick="FastBaseLogin();">Login</button>
+					<button class="btn btn-lg btn-primary btn-block" onclick="FuseBaseLogin();">Login</button>
 				</div>
 				
 			</div>

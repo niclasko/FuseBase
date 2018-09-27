@@ -48,7 +48,7 @@ function processSourceCodeInput(e, element) {
 
 }
 
-function FastBaseClient($http) {
+function FuseBaseClient($http) {
 	this.init =
 		function() {
 			this.queries.init(this);
@@ -1614,14 +1614,14 @@ $(document).ready(
 	}
 );
 
-var fastBaseApp =
+var fuseBaseApp =
 	angular.module(
-		'ngFastBase', 
+		'ngFuseBase', 
 		['ngRoute', 'ui.bootstrap']
 	);
 
 // Configure routes
-fastBaseApp.config(
+fuseBaseApp.config(
 	function($routeProvider) {
 		$routeProvider
 			// route for the home page
@@ -1665,8 +1665,8 @@ fastBaseApp.config(
 var fbClient;
 
 // Common controller for top-level page
-fastBaseApp.controller(
-	'FastBaseWebClientControl',
+fuseBaseApp.controller(
+	'FuseBaseWebClientControl',
 	function($scope, $http) {
 		
 		$http.get("/user/current").success(
@@ -1677,12 +1677,12 @@ fastBaseApp.controller(
 			}
 		);
 		
-		$scope.fastBaseClient =
-			new FastBaseClient($http);
+		$scope.fuseBaseClient =
+			new FuseBaseClient($http);
 			
-		fbClient = $scope.fastBaseClient;
+		fbClient = $scope.fuseBaseClient;
 			
-		$scope.fastBaseClient.init();
+		$scope.fuseBaseClient.init();
 		
 		$scope.angular = angular;
 		
@@ -1690,42 +1690,42 @@ fastBaseApp.controller(
 );
 
 // Controllers for sub-pages
-fastBaseApp.controller(
+fuseBaseApp.controller(
 	'homeController',
 	function($scope) {
 		;
 	}
 );
 
-fastBaseApp.controller(
+fuseBaseApp.controller(
 	'connectionsController',
 	function($scope, $http) {
 		;
 	}
 );
 
-fastBaseApp.controller(
+fuseBaseApp.controller(
 	'queriesController',
 	function($scope) {
 		;
 	}
 );
 
-fastBaseApp.controller(
+fuseBaseApp.controller(
 	'scriptsController',
 	function($scope) {
 		;
 	}
 );
 
-fastBaseApp.controller(
+fuseBaseApp.controller(
 	'usersController',
 	function($scope) {
 		;
 	}
 );
 
-fastBaseApp.controller(
+fuseBaseApp.controller(
 	'systemController',
 	function($scope) {
 		;

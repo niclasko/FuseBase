@@ -29,7 +29,7 @@ Then
     ```
     var query = "select * from bigtable";
     var outputFilePath = "/data/out.csv";
-    FuseBase.queryToFile(CONNECTION_NAME, query, outputFilePath, CSV);
+    FuseBase.queryToFile(CONNECTION_NAME, query, outputFilePath, "CSV");
     output.writeBytes("Done");
     ```
 

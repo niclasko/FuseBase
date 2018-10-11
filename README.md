@@ -11,8 +11,8 @@ FuseBase offers the following capabilities:
 * Fast data offloading to disk (CSV) from any JDBC data source
 * Fast data ingestion via JDBC
 * Data virtualization (via extension)
-* Config done using WEB GUI
-* Usage is via API
+* Config done using WEB UI
+* Usage is via API or WEB UI
 
 Quick start:
 ```Shell

@@ -137,7 +137,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/users/roles").success(
+				$http.get("/api/users/roles").success(
 					function(response) {
 				
 						me.data = response.data;
@@ -205,7 +205,7 @@ function FuseBaseClient($http) {
 					"&roleType=" + encodeURIComponent(role.roleType) +
 					"&privilegeList=" + encodeURIComponent(privileges.privilegeList.join(","));
 
-				$http.get("/users/roles/add?" + queryString).success(
+				$http.get("/api/users/roles/add?" + queryString).success(
 					function(response) {
 
 						var feedback =
@@ -263,7 +263,7 @@ function FuseBaseClient($http) {
 					"&privilegeList=" + encodeURIComponent(privilegesDelta.privilegeList) +
 					"&privilegeListToRemove=" + encodeURIComponent(privilegesDelta.privilegeListToRemove)
 				
-				$http.get("/users/roles/update/privileges?" + queryString).success(
+				$http.get("/api/users/roles/update/privileges?" + queryString).success(
 					function(response) {
 
 						var feedback =
@@ -294,7 +294,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/users/roles/delete?name=" + role.name).success(
+				$http.get("/api/users/roles/delete?name=" + role.name).success(
 					function(response) {
 
 						var feedback =
@@ -328,7 +328,7 @@ function FuseBaseClient($http) {
 				this.roleTypes = [];
 				var me = this;
 
-				$http.get("/users/roles/types").success(
+				$http.get("/api/users/roles/types").success(
 					function(response) {
 
 						me.roleTypes =
@@ -360,7 +360,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/users").success(
+				$http.get("/api/users").success(
 					function(response) {
 				
 						me.data = response.data;
@@ -455,7 +455,7 @@ function FuseBaseClient($http) {
 							)
 						);
 				
-				$http.get("/user/changepassword?h1=" + h1 + "&h2=" + h2).success(
+				$http.get("/api/user/changepassword?h1=" + h1 + "&h2=" + h2).success(
 					function(response) {
 
 						var feedback =
@@ -492,7 +492,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/user/delete?" + me.parent.buildQueryString(user, {'$$hashKey': ''})).success(
+				$http.get("/api/user/delete?" + me.parent.buildQueryString(user, {'$$hashKey': ''})).success(
 					function(response) {
 
 						var feedback =
@@ -599,7 +599,7 @@ function FuseBaseClient($http) {
 					"&roleList=" + encodeURIComponent(userRolesAndPrivilegesDelta.roleList.join(",")) +
 					"&roleListToRemove=" + encodeURIComponent(userRolesAndPrivilegesDelta.roleListToRemove.join(","));
 				
-				$http.get("/user/privilegesandroles/update?" + queryString).success(
+				$http.get("/api/user/privilegesandroles/update?" + queryString).success(
 					function(response) {
 
 						var feedback =
@@ -646,7 +646,7 @@ function FuseBaseClient($http) {
 					"&roleList=" + encodeURIComponent(userRolesAndPrivileges.roleList.join(",")) +
 					"&privilegeList=" + encodeURIComponent(userRolesAndPrivileges.privilegeList.join(","));
 				
-				$http.get("/user/add?" + queryString).success(
+				$http.get("/api/user/add?" + queryString).success(
 					function(response) {
 
 						var feedback =
@@ -681,7 +681,7 @@ function FuseBaseClient($http) {
 		getClientKeys:
 			function(user) {
 				
-				$http.get("/user/clientkeys?username=" + user.username).success(
+				$http.get("/api/user/clientkeys?username=" + user.username).success(
 					function(response) {
 
 						user.clientKeys =
@@ -696,7 +696,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/user/generateclientkey?username=" + user.username).success(
+				$http.get("/api/user/generateclientkey?username=" + user.username).success(
 					function(response) {
 							
 						me.getClientKeys(user);
@@ -716,7 +716,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/user/clientkey/delete?username=" + user.username + "&clientkey=" + clientKey).success(
+				$http.get("/api/user/clientkey/delete?username=" + user.username + "&clientkey=" + clientKey).success(
 					function(response) {
 							
 						me.getClientKeys(user);
@@ -736,7 +736,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/user/clientkeys/deleteall?username=" + user.username).success(
+				$http.get("/api/user/clientkeys/deleteall?username=" + user.username).success(
 					function(response) {
 							
 						me.getClientKeys(user);
@@ -784,7 +784,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/connections/registeredqueries").success(
+				$http.get("/api/connections/registeredqueries").success(
 					function(response) {
 				
 						me.data = response.data;
@@ -799,7 +799,7 @@ function FuseBaseClient($http) {
 				this.queryResults = {};
 				var me = this;
 				
-				$http.get("/connections/query?" + me.parent.buildQueryString(queryObject, {'$$hashKey': '', 'queryId': ''})).success(
+				$http.get("/api/connections/query?" + me.parent.buildQueryString(queryObject, {'$$hashKey': '', 'queryId': ''})).success(
 					function(response) {
 				
 						me.queryResults =
@@ -814,7 +814,7 @@ function FuseBaseClient($http) {
 				this.queryResults = {};
 				var me = this;
 
-				$http.get("/connections/registeredquery?" + me.parent.buildQueryString(queryObject, {'$$hashKey': '', 'query': ''})).success(
+				$http.get("/api/connections/registeredquery?" + me.parent.buildQueryString(queryObject, {'$$hashKey': '', 'query': ''})).success(
 					function(response) {
 
 						me.queryResults =
@@ -831,7 +831,7 @@ function FuseBaseClient($http) {
 				
 				$(event.target).prop('disabled', true);
 				
-				$http.get("/connections/query/register?" + me.parent.buildQueryString(queryObject, {'$$hashKey': ''})).success(
+				$http.get("/api/connections/query/register?" + me.parent.buildQueryString(queryObject, {'$$hashKey': ''})).success(
 					function(response) {
 
 						var feedback =
@@ -866,7 +866,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 
-				$http.get("/connections/query/delete?queryId=" + queryObject.queryId).success(
+				$http.get("/api/connections/query/delete?queryId=" + queryObject.queryId).success(
 					function(response) {
 						
 						var feedback =
@@ -898,7 +898,7 @@ function FuseBaseClient($http) {
 				this.queryTypes = [];
 				var me = this;
 
-				$http.get("/connections/querytypes").success(
+				$http.get("/api/connections/querytypes").success(
 					function(response) {
 
 						me.queryTypes =
@@ -927,7 +927,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/scripts").success(
+				$http.get("/api/scripts").success(
 					function(response) {
 				
 						me.data = response.data;
@@ -987,7 +987,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/scripts/source?name=" + script.name).success(
+				$http.get("/api/scripts/source?name=" + script.name).success(
 					function(response) {
 				
 						me.data[me.scriptNamesToDataIndex[script.name]]["source"] = response;
@@ -1007,7 +1007,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				/*$http.get("/scripts/upload?name=" + script.name + "&source=" + encodeURIComponent(script.source)).success(
+				/*$http.get("/api/scripts/upload?name=" + script.name + "&source=" + encodeURIComponent(script.source)).success(
 					function(response) {
 				
 						var feedback =
@@ -1030,7 +1030,7 @@ function FuseBaseClient($http) {
 				
 				$http({
 					method: 'post',
-					url: '/scripts/upload?name=' + script.name,
+					url: '/api/scripts/upload?name=' + script.name,
 					data: script.source
 				}).success(
 					function(response) {
@@ -1065,7 +1065,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/scripts/delete?name=" + script.name).success(
+				$http.get("/api/scripts/delete?name=" + script.name).success(
 					function(response) {
 				
 						var feedback =
@@ -1090,7 +1090,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				/*$http.get("/scripts/run/anonymous?source=" + encodeURIComponent(script.source)).success(
+				/*$http.get("/api/scripts/run/anonymous?source=" + encodeURIComponent(script.source)).success(
 					function(response) {
 				
 						me.scriptOutput =
@@ -1101,7 +1101,7 @@ function FuseBaseClient($http) {
 					
 				$http({
 					method: 'post',
-					url: '/scripts/run/anonymous',
+					url: '/api/scripts/run/anonymous',
 					data: script.source
 				}).success(
 					function(response) {
@@ -1120,7 +1120,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/scripts/run?name=" + script.name).success(
+				$http.get("/api/scripts/run?name=" + script.name).success(
 					function(response) {
 				
 						me.scriptOutput =
@@ -1151,7 +1151,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/scheduler/jobs").success(
+				$http.get("/api/scheduler/jobs").success(
 					function(response) {
 				
 						me.data = response.data;
@@ -1192,7 +1192,7 @@ function FuseBaseClient($http) {
 					'&initialDelay=' + job.initialDelay +
 					'&period=' + job.period;
 				
-				$http.get("/scheduler/jobs/create?" + queryString).success(
+				$http.get("/api/scheduler/jobs/create?" + queryString).success(
 					function(response) {
 				
 						var feedback =
@@ -1223,7 +1223,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/scheduler/jobs/delete?name=" + job.name).success(
+				$http.get("/api/scheduler/jobs/delete?name=" + job.name).success(
 					function(response) {
 				
 						var feedback =
@@ -1246,7 +1246,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/scheduler/jobs/start?name=" + job.name).success(
+				$http.get("/api/scheduler/jobs/start?name=" + job.name).success(
 					function(response) {
 				
 						me.list();
@@ -1261,7 +1261,7 @@ function FuseBaseClient($http) {
 				this.currentJob = job;
 				this.logFileContents = '';
 				
-				$http.get("/scheduler/jobs/logs?name=" + job.name).success(
+				$http.get("/api/scheduler/jobs/logs?name=" + job.name).success(
 					function(response) {
 				
 						job['logEntries'] =
@@ -1275,7 +1275,7 @@ function FuseBaseClient($http) {
 			
 			var me = this;
 			
-			$http.get("/scheduler/jobs/logs/getfile?name=" + job.name + "&fileName=" + logEntry.fileName).success(
+			$http.get("/api/scheduler/jobs/logs/getfile?name=" + job.name + "&fileName=" + logEntry.fileName).success(
 				function(response) {
 			
 					me.logFileContents = response;
@@ -1289,7 +1289,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/scheduler/timeunits").success(
+				$http.get("/api/scheduler/timeunits").success(
 					function(response) {
 				
 						me.timeUnits = response.data;
@@ -1333,7 +1333,7 @@ function FuseBaseClient($http) {
 						
 						$http({
 							method: 'post',
-							url: '/system/import/all',
+							url: '/api/system/import/all',
 							data: new Uint8Array(fileReader.result),
 							transformRequest: []
 						}).success(
@@ -1384,7 +1384,7 @@ function FuseBaseClient($http) {
 				
 				$(event.target).prop('disabled', true);
 				
-				$http.get("/connections/connect?connectionName=" + connectionName).success(
+				$http.get("/api/connections/connect?connectionName=" + connectionName).success(
 					function(response) {
 						var feedback =
 							response.data[0];
@@ -1428,7 +1428,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/connections/list").success(
+				$http.get("/api/connections/list").success(
 					function(response) {
 				
 						me.data = response.data;
@@ -1446,7 +1446,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/connections/delete?connectionName=" + connectionName).success(
+				$http.get("/api/connections/delete?connectionName=" + connectionName).success(
 					function(response) {
 						var feedback =
 							response.data[0];
@@ -1514,7 +1514,7 @@ function FuseBaseClient($http) {
 					var queryString = "";
 					var i = 0;
 					
-					$http.get("/connections/addorupdate?" + me.parent.buildQueryString(this.current, {'$$hashKey': ''})).success(
+					$http.get("/api/connections/addorupdate?" + me.parent.buildQueryString(this.current, {'$$hashKey': ''})).success(
 						function(response) {
 							var feedback =
 								response.data[0];
@@ -1562,7 +1562,7 @@ function FuseBaseClient($http) {
 				
 				var me = this;
 				
-				$http.get("/connections/jdbcdriverinfo").success(
+				$http.get("/api/connections/jdbcdriverinfo").success(
 					function(response) {
 						
 						me.jdbcDrivers = response.data;
@@ -1669,7 +1669,7 @@ fuseBaseApp.controller(
 	'FuseBaseWebClientControl',
 	function($scope, $http) {
 		
-		$http.get("/user/current").success(
+		$http.get("/api/user/current").success(
 			function(response) {
 				
 				$scope.currentUsername =

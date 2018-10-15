@@ -45,7 +45,6 @@ public class FuseBaseWebServer implements HttpRequestProcessor {
 		
 		this.unrestrictedResourceFilePaths =
 			new String[] {
-				"web/login",
 				"web/js",
 				"web/css",
 				"ui/login"

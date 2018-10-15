@@ -74,6 +74,8 @@ public class FuseBaseRESTAPI {
 		Class validValuesClass() default Object.class;
 	}
 	
+	private static final String API_PREFIX = "api/";
+	
 	/* END Annotation definitions for ReST API */
 	
 	public FuseBaseRESTAPI(FuseBase FuseBase) throws Exception {
@@ -141,6 +143,13 @@ public class FuseBaseRESTAPI {
 					method.getAnnotations()
 				);
 			
+			String apiPath =
+				method.getName().replaceAll("_", "/");
+			
+			if(!apiPath.equals("api")) {
+				apiPath = FuseBaseRESTAPI.API_PREFIX + apiPath;
+			}
+			
 			if(annotationMap.containsKey("HTTP_ENDPOINT")) {
 				
 				methodAnnotation =
@@ -167,9 +176,6 @@ public class FuseBaseRESTAPI {
 				
 				}
 				
-				String apiPath =
-					method.getName().replaceAll("_", "/");
-				
 				// Register endpoint for routing
 				this.httpEndpointMethods.put(
 					apiPath,
@@ -190,7 +196,7 @@ public class FuseBaseRESTAPI {
 				
 				apiMethodDescriptor.$('{');
 				
-				apiMethodDescriptor.k("endpoint").v(method.getName().replaceAll("_", "/"));
+				apiMethodDescriptor.k("endpoint").v(apiPath);
 				
 				// List API annotation attributes
 				for(Method annotationMethod : methodAnnotation.annotationType().getDeclaredMethods()) {
@@ -383,12 +389,12 @@ public class FuseBaseRESTAPI {
 				(httpRequest != null ? httpRequest.parameter("callback") : "")
 			);
 		
-		FuseBaseRESTAPIMethod FuseBaseRESTAPIMethod =
+		FuseBaseRESTAPIMethod fuseBaseRESTAPIMethod =
 			this.httpEndpointMethods.get(
 				aPIPath
 			);
 		
-		if(FuseBaseRESTAPIMethod != null) {
+		if(fuseBaseRESTAPIMethod != null) {
 			
 			Object[] methodParameters =
 				new Object[]{
@@ -400,7 +406,7 @@ public class FuseBaseRESTAPI {
 					)
 				};
 			
-			if(FuseBaseRESTAPIMethod.requiresAuthentication()) {
+			if(fuseBaseRESTAPIMethod.requiresAuthentication()) {
 				
 				String sessionKey =
 					this.getSessionKey(
@@ -409,9 +415,9 @@ public class FuseBaseRESTAPI {
 				
 				if(this.isAuthenticated(sessionKey, httpServerThread)) {
 					
-					if(this.isAuthorized(sessionKey, FuseBaseRESTAPIMethod.apiPath())) {
+					if(this.isAuthorized(sessionKey, fuseBaseRESTAPIMethod.apiPath())) {
 						
-						FuseBaseRESTAPIMethod.method().invoke(
+						fuseBaseRESTAPIMethod.method().invoke(
 							this,
 							methodParameters
 						);
@@ -438,7 +444,7 @@ public class FuseBaseRESTAPI {
 				
 			} else {
 				
-				FuseBaseRESTAPIMethod.method().invoke(
+				fuseBaseRESTAPIMethod.method().invoke(
 					this,
 					methodParameters
 				);
@@ -2669,9 +2675,9 @@ public class FuseBaseRESTAPI {
 	}
 	
 	@HTTP_ENDPOINT
-	public void api_privileges(FuseBaseRESTAPICall c) throws Exception {
+	public void privileges(FuseBaseRESTAPICall c) throws Exception {
 		
-		this.api_privileges(
+		this.privileges(
 			c.jsonCallbackFunction(),
 			c
 		);
@@ -2679,7 +2685,7 @@ public class FuseBaseRESTAPI {
 	}
 	
 	@API(type=HttpRequestType.GET)
-	public void api_privileges(	@Parameter(name="jsonCallbackFunction", required=false)
+	public void privileges(	@Parameter(name="jsonCallbackFunction", required=false)
 								String jsonCallbackFunction,
 								FuseBaseRESTAPICall c
 							

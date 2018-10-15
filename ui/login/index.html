@@ -64,7 +64,7 @@
 				
 				xhr.open(
 					"GET",
-					"/user/authenticate?h=" +
+					"/api/user/authenticate?h=" +
 						window.btoa(e('username').value + ':' + e('password').value) +
 						"&sessionExpiryTimeInMs=" + (e('rememberuser').checked ? "-1" : "3600000") +
 						"&hostName=" + encodeURIComponent(window.location.hostname),

@@ -234,7 +234,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					
+
 					<div class="panel panel-default">
 						<div class="panel-heading"><label for="checkbox">Privileges</label></div>
 						<div class="panel-body" style="height: 150px; overflow-y: auto;">
@@ -243,7 +243,7 @@
 							</div>
 						</div>
 					</div>
-					
+
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -262,16 +262,16 @@
 				<h4 class="modal-title">Edit client keys for <b>{{ fuseBaseClient.users.current.username }}</b></h4>
 			</div>
 			<div class="modal-body">
-				
+
 				<div>
 					<button ng-click="fuseBaseClient.users.generateClientKey(fuseBaseClient.users.current);">Generate client key</button>
 					<button ng-click="fuseBaseClient.users.deleteAllClientKeys(fuseBaseClient.users.current);" style="{{ (fuseBaseClient.users.current.clientKeys.length == 0 ? 'display: none;' : ''); }}">Delete all client keys...</button>
 				</div>
-				
+
 				<div style="{{ (fuseBaseClient.users.current.clientKeys.length > 0 ? 'display: none;' : ''); }}">
 					No registered client keys for user.
 				</div>
-				
+
 				<table class="table table-striped" style="{{ (fuseBaseClient.users.current.clientKeys.length == 0 ? 'display: none;' : ''); }}">
 					<thead>
 						<tr>
@@ -283,16 +283,16 @@
 					<tbody><!-- fuseBaseClient.users.getClientKeyAuthenticationLink(ck) -->
 						<tr ng-repeat="ck in fuseBaseClient.users.current.clientKeys">
 							<td>{{ ck }}</td>
-							<td>{{ fuseBaseClient.currentURL() + '/clientkey/authenticate?clientKey=' + ck + '&outputType=JSON' }}</td>
+							<td>{{ fuseBaseClient.currentURL() + '/api/clientkey/authenticate?clientKey=' + ck + '&outputType=JSON' }}</td>
 							<td>
 								<button ng-click="fuseBaseClient.users.deleteClientKey(fuseBaseClient.users.current, ck);">Delete...</button>
 							</td>
 						</tr>
 					</tbody>
 				</table>
-				
+
 				<div id="clientKeyAuthenticationLink"></div>
-				
+
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -15,6 +15,7 @@
  */
 import java.io.DataOutputStream;
 import java.util.jar.JarFile;
+import java.io.File;
 
 public class FuseBaseWebServer implements HttpRequestProcessor {
 	
@@ -33,10 +34,10 @@ public class FuseBaseWebServer implements HttpRequestProcessor {
 			);
 			
 		try {
-			
+
 			this.currentJarFile =
 				new JarFile(
-					FuseBaseRESTAPI.class.getProtectionDomain().getCodeSource().getLocation().getFile()
+					(new File(FuseBaseRESTAPI.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath())
 				);
 			
 		} catch(Exception e) {

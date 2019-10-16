@@ -12,3 +12,5 @@ cd classes
 jar cvfe ..\build\fusebase.jar FuseBase ./* ../web/* ../ui/*
 
 cd ..
+
+del classes\*.class

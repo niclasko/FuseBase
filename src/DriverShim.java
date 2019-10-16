@@ -89,7 +89,7 @@ class DriverShim implements Driver {
 		
 	}
 
-	private static void registerDriver(String jdbcDriverPath, String className) {
+	private static void registerDriver(String jdbcDriverPath, String className) throws SQLException, Exception {
 		DriverShim.updateClassPath(jdbcDriverPath);
 	
 		URL u = new URL("jar:file:" + jdbcDriverPath + "!/");

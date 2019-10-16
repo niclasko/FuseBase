@@ -1074,6 +1074,7 @@ public class FuseBaseRESTAPI {
 			connectString = replaceURL(c.httpRequest().parameter("connectString")),
 			user = replaceURL(c.httpRequest().parameter("user")),
 			passWord = replaceURL(c.httpRequest().parameter("passWord")),
+			useUserAndPassword = replaceURL(c.httpRequest().parameter("useUserAndPassword")),
 			jdbcDriverClass = replaceURL(c.httpRequest().parameter("jdbcDriverClass")),
 			jdbcDriverInfoName = replaceURL(c.httpRequest().parameter("jdbcDriverInfoName"));
 		
@@ -1082,6 +1083,7 @@ public class FuseBaseRESTAPI {
 			connectString,
 			user,
 			passWord,
+			useUserAndPassword,
 			jdbcDriverClass,
 			jdbcDriverInfoName,
 			c.jsonCallbackFunction(),
@@ -1099,6 +1101,8 @@ public class FuseBaseRESTAPI {
 											String user,
 											@Parameter(name="passWord")
 											String passWord,
+											@Parameter(name="useUserAndPassword")
+											String useUserAndPassword,
 											@Parameter(name="jdbcDriverClass")
 											String jdbcDriverClass,
 											@Parameter(name="jdbcDriverInfoName")
@@ -1115,6 +1119,7 @@ public class FuseBaseRESTAPI {
 				connectString,
 				user,
 				passWord,
+				Boolean.parseBoolean(useUserAndPassword),
 				jdbcDriverClass,
 				jdbcDriverInfoName
 			);

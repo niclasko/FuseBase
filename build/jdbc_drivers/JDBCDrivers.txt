@@ -54,6 +54,13 @@ ConnectStringPattern=jdbc:teradata://host:port/database=dbname
 ValidationQuery=
 ConnectionPoolSize=5
 
+[SQL Server]
+DriverPath=./jdbc_drivers/SQL Server/sqljdbc42.jar
+ClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
+ConnectStringPattern=jdbc:sqlserver://server:port;databaseName=dbname
+ValidationQuery=
+ConnectionPoolSize=5
+
 [CSV]
 DriverPath=./jdbc_drivers/CSV/csvjdbc-1.0-29.jar
 ClassName=org.relique.jdbc.csv.CsvDriver

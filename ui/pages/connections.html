@@ -5,7 +5,6 @@
 			<th>Name</td>
 			<th>Connection String</th>
 			<th>User</td>
-			<th>Use User and Password</td>
 			<th>Connected</th>
 			<th>Action</th>
 		</tr>
@@ -15,7 +14,6 @@
 			<td>{{ c.connectionName }}</td>
 			<td>{{ c.connectString }}</td>
 			<td>{{ c.user }}</td>
-			<td>{{ c.useUserAndPassword }}</td>
 			<td>{{ (c.isConnected ? 'Yes' : 'No') }}</td>
 			<td>
 				<button ng-click="fuseBaseClient.connections.connect($event, c.connectionName);">{{ (c.isConnected ? 'Reconnect' : 'Connect') }}</button>
@@ -54,8 +52,8 @@
 					<input type="text" class="form-control" ng-model="fuseBaseClient.connections.current.user">
 					<label for="text">Password</label>
 					<input type="password" class="form-control" ng-model="fuseBaseClient.connections.current.passWord">
-					<label for="text">Use User and Password</label>
-					<input type="checkbox" class="form-control" ng-model="fuseBaseClient.connections.current.useUserAndPassword">
+					<input type="checkbox" class="form-check-input" id="chkUseUserAndPassword" ng-model="fuseBaseClient.connections.current.useUserAndPassword">
+    				<label class="form-check-label" for="chkUseUserAndPassword">User and Password</label>
 				</div>
 			</div>
 			<div class="modal-footer">

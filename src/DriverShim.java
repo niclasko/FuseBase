@@ -88,9 +88,8 @@ class DriverShim implements Driver {
 		}
 		
 	}
-	
-	public static Connection getConnection(String jdbcDriverPath, String className, String connectionString, String user, String passWord) throws SQLException, Exception {
-		
+
+	private static void registerDriver(String jdbcDriverPath, String className) {
 		DriverShim.updateClassPath(jdbcDriverPath);
 	
 		URL u = new URL("jar:file:" + jdbcDriverPath + "!/");
@@ -98,7 +97,15 @@ class DriverShim implements Driver {
 		URLClassLoader ucl = new URLClassLoader(new URL[] { u });
 		Driver d = (Driver)Class.forName(classname, true, ucl).newInstance();
 		DriverManager.registerDriver(new DriverShim(d));
-		
+	}
+
+	public static Connection getConnection(String jdbcDriverPath, String className, String connectionString) throws SQLException, Exception {
+		DriverShim.registerDriver(jdbcDriverPath, className);
+		return DriverManager.getConnection(connectionString);
+	}
+	
+	public static Connection getConnection(String jdbcDriverPath, String className, String connectionString, String user, String passWord) throws SQLException, Exception {
+		DriverShim.registerDriver(jdbcDriverPath, className);		
 		return DriverManager.getConnection(connectionString, user, passWord);
 		
 	}

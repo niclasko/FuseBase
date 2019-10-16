@@ -26,6 +26,7 @@ public class DBConnection implements Serializable {
 	private String connectString;
 	private String user;
 	private String passWord;
+	private boolean useUserAndPassword = true;
 	private String jdbcDriverClass;
 	private String validationQuery;
 	private boolean isConnected;
@@ -38,11 +39,12 @@ public class DBConnection implements Serializable {
 	
 	private JDBCDriverInfo jdbcDriverInfo;
 	
-	public DBConnection(String connectionName, String connectString, String user, String passWord, String jdbcDriverClass, JDBCDriverInfo jdbcDriverInfo) {
+	public DBConnection(String connectionName, String connectString, String user, String passWord, boolean useUserAndPassword, String jdbcDriverClass, JDBCDriverInfo jdbcDriverInfo) {
 		this.connectionName = connectionName;
 		this.connectString = connectString;
 		this.user = user;
 		this.passWord = passWord;
+		this.useUserAndPassword = useUserAndPassword;
 		this.jdbcDriverClass = jdbcDriverClass;
 		this.validationQuery = jdbcDriverInfo.getValidationQuery();
 		this.isConnected = false;
@@ -50,6 +52,14 @@ public class DBConnection implements Serializable {
 		this.jdbcDriverInfo = jdbcDriverInfo;
 		
 		this.connections = null;
+	}
+
+	public void setUseUserAndPassword(boolean useUserAndPassword) {
+		this.useUserAndPassword = useUserAndPassword;
+	}
+
+	public boolean useUserAndPassword() {
+		return this.useUserAndPassword;
 	}
 	
 	public boolean isDefaultConnection() {
@@ -178,6 +188,7 @@ public class DBConnection implements Serializable {
 			"connectionName: " + this.connectionName + "\n" +
 			"connectString: " + this.connectString + "\n" +
 			"user: " + this.user + "\n" +
+			"useUserAndPassword: " + this.useUserAndPassword + "\n" +
 			"jdbcDriverClass: " + this.jdbcDriverClass + "\n" +
 			"JDBCDriverInfo:\n" + jdbcDriverInfo.toString();
 	}
@@ -191,6 +202,7 @@ public class DBConnection implements Serializable {
 					k("jdbcDriverInfoName").v(this.jdbcDriverInfo.getName()).
 					k("jdbcDriverClass").v(this.getJDBCDriverClass()).
 					k("user").v(this.getUser()).
+					k("useUserAndPassword").v(this.useUserAndPassword()).
 					k("isConnected").v(this.isConnected).
 					k("Default").v(this.isDefaultConnection()).
 				$('}');
@@ -206,6 +218,7 @@ public class DBConnection implements Serializable {
 					k("jdbcDriverClass").v(this.getJDBCDriverClass()).
 					k("user").v(this.getUser()).
 					k("passWord").v(this.getPassword()).
+					k("useUserAndPassword").v(this.useUserAndPassword()).
 				$('}');
 	}
 	
@@ -242,13 +255,21 @@ public class DBConnection implements Serializable {
 		
 		for(int i=0; i<this.jdbcDriverInfo.getConnectionPoolSize(); i++) {
 			
-			this.connections[i] = DriverShim.getConnection(
-				this.jdbcDriverInfo.getJDBCDriverPath(),
-				this.jdbcDriverClass,
-				this.connectString,
-				this.user,
-				this.passWord
-			);
+			if(this.useUserAndPassword()) {
+				this.connections[i] = DriverShim.getConnection(
+					this.jdbcDriverInfo.getJDBCDriverPath(),
+					this.jdbcDriverClass,
+					this.connectString,
+					this.user,
+					this.passWord
+				);
+			} else if(!this.useUserAndPassword()) {
+				this.connections[i] = DriverShim.getConnection(
+					this.jdbcDriverInfo.getJDBCDriverPath(),
+					this.jdbcDriverClass,
+					this.connectString
+				);
+			}
 			
 		}
 		

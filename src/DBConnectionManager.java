@@ -90,6 +90,7 @@ public class DBConnectionManager implements Serializable, RESTAPIValidValues {
 											String connectString,
 											String user,
 											String passWord,
+											boolean useUserAndPassword,
 											String jdbcDriverClass,
 											String jdbcDriverInfoName	) {
 		
@@ -107,6 +108,7 @@ public class DBConnectionManager implements Serializable, RESTAPIValidValues {
 					connectString,
 					user,
 					passWord,
+					useUserAndPassword,
 					jdbcDriverClass,
 					jdbcDriverInfo
 				)
@@ -152,6 +154,7 @@ public class DBConnectionManager implements Serializable, RESTAPIValidValues {
 			connectionJSON.get("connectString").getValue().toString(),
 			connectionJSON.get("user").getValue().toString(),
 			connectionJSON.get("passWord").getValue().toString(),
+			Boolean.parseBoolean(connectionJSON.get("useUserAndPassword").getValue().toString()),
 			connectionJSON.get("jdbcDriverClass").getValue().toString(),
 			connectionJSON.get("jdbcDriverInfoName").getValue().toString()
 		);

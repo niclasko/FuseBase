@@ -3374,7 +3374,7 @@ public class FuseBaseRESTAPI {
 		
 		String
 			name = this.replaceURL(c.httpRequest().parameter("name")),
-			scriptName = c.httpRequest().parameter("scriptName");
+			scriptName = this.replaceURL(c.httpRequest().parameter("scriptName"));
 		long
 			initialDelay = Long.parseLong(c.httpRequest().parameter("initialDelay")),
 			period = Long.parseLong(c.httpRequest().parameter("period"));

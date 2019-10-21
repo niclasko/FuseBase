@@ -1030,7 +1030,7 @@ function FuseBaseClient($http) {
 				
 				$http({
 					method: 'post',
-					url: '/api/scripts/upload?name=' + script.name,
+					url: '/api/scripts/upload?name=' + encodeURIComponent(script.name),
 					data: script.source
 				}).success(
 					function(response) {
@@ -1186,8 +1186,8 @@ function FuseBaseClient($http) {
 				var me = this;
 				
 				var queryString =
-					'name=' + job.name +
-					'&scriptName=' + job.scriptName +
+					'name=' + encodeURIComponent(job.name) +
+					'&scriptName=' + encodeURIComponent(job.scriptName) +
 					'&timeUnit=' + job.timeUnit +
 					'&initialDelay=' + job.initialDelay +
 					'&period=' + job.period;

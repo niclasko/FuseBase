@@ -5,6 +5,20 @@ ConnectStringPattern=jdbc:oracle:thin:@//hostname:port/servicename
 ValidationQuery=SELECT 1 FROM DUAL
 ConnectionPoolSize=5
 
+[Elasticsearch]
+DriverPath=./jdbc_drivers/Elasticsearch/opendistro-sql-jdbc-1.13.0.0.jar
+ClassName=com.amazon.opendistroforelasticsearch.jdbc.Driver
+ConnectStringPattern=jdbc:elasticsearch://https://host:port
+ValidationQuery=
+ConnectionPoolSize=5
+
+[Google Analytics]
+DriverPath=./jdbc_drivers/Google Analytics/GA-jdbc.jar
+ClassName=org.sebson.jdbc.GA.GADriver
+ConnectStringPattern=jdbc:GA://?KEY_FILE_LOCATION=path_to_key_file
+ValidationQuery=
+ConnectionPoolSize=5
+
 [HANA]
 DriverPath=./jdbc_drivers/SAP Hana/ngdbc.jar
 ClassName=com.sap.db.jdbc.Driver

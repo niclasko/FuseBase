@@ -2254,8 +2254,6 @@ public class FuseBaseRESTAPI {
 				c.output().flush();
 		
 			} catch(Exception e) {
-				
-				e.printStackTrace();
 		
 				this.apiResponseError(
 					c.output(),
@@ -3827,7 +3825,7 @@ public class FuseBaseRESTAPI {
 	}
 	
 	private void apiResponseError(DataOutputStream output, String message, String callback) throws Exception {
-		
+
 		this.jsonReply(
 			output,
 			JSONBuilder.f().
@@ -3854,7 +3852,7 @@ public class FuseBaseRESTAPI {
 	}
 	
 	private void jsonReply(DataOutputStream output, JSONBuilder json, String callback, String cookie) throws Exception {
-		
+
 		if(cookie != null) {
 			
 			String[] headers =
@@ -3894,7 +3892,7 @@ public class FuseBaseRESTAPI {
 		if(callback != null) {
 			output.writeBytes(");");
 		}
-		
+
 		output.flush();
 		
 	}

@@ -26,19 +26,26 @@ import java.net.HttpURLConnection;
 import java.io.Serializable;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.io.DataOutput;
-import java.util.HashMap;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.internal.objects.NativeArray;
-import java.util.Set;
 import java.util.Map;
-import java.util.List;
 
 public class ScriptAPI implements Serializable {
 	
 	private FuseBase fuseBase;
+
+	public final String FILE_NOT_FOUND = HttpResponseHeader.FILE_NOT_FOUND.headerData();
+	public final String SEE_OTHER = HttpResponseHeader.SEE_OTHER.headerData();
+	public final String PERMANENTLY_MOVED = HttpResponseHeader.PERMANENTLY_MOVED.headerData();
+	public final String NO_CACHE_MUST_REVALIDATE = HttpResponseHeader.NO_CACHE_MUST_REVALIDATE.headerData();
+	public final String CONNECTION_CLOSE = HttpResponseHeader.CONNECTION_CLOSE.headerData();
+	public final String AGE_ZERO = HttpResponseHeader.AGE_ZERO.headerData();
+	public final String DEFAULT_HEADER = HttpResponseHeader.DEFAULT_HEADER.headerData();
+	public final String JSON_HEADERS = HttpResponseHeader.JSON_HEADERS.headerData();
+	public final String CSV_HEADERS = HttpResponseHeader.CSV_HEADERS.headerData();
+	public final String NEW_LINE = HttpResponseHeader.NEW_LINE.headerData();
 	
 	public ScriptAPI(FuseBase fuseBase) {
 		this.fuseBase = fuseBase;

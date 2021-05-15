@@ -13,20 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.lang.System;
-import java.io.File;
-import java.util.Date;
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.StringWriter;
-import java.io.PrintWriter;
-import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.Locale;
 import java.text.SimpleDateFormat;
@@ -76,6 +72,21 @@ public class Utils {
 		} catch(Exception e) {
 			return 0;
 		}
+	}
+
+	public static String readInputStreamToString(InputStream inputStream) throws Exception {
+		StringBuilder contents = new StringBuilder();
+		char[] buffer = new char[4096];
+		int bytesRead = 0;
+
+		InputStreamReader inputStreamReader =
+			new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+
+		while((bytesRead = inputStreamReader.read(buffer, 0, buffer.length)) > 0) {
+			contents.append(buffer, 0, bytesRead);
+		}
+
+		return contents.toString();
 	}
 	
 	public static String getCurrentPath() {

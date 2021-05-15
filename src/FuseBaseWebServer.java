@@ -21,7 +21,6 @@ public class FuseBaseWebServer implements HttpRequestProcessor {
 	
 	private FuseBase fuseBase;
 	private FuseBaseRESTAPI fuseBaseRESTAPI;
-	private JarFile currentJarFile;
 	private String[] unrestrictedResourceFilePaths;
 	
 	public FuseBaseWebServer(FuseBase fuseBase) throws Exception {
@@ -32,17 +31,6 @@ public class FuseBaseWebServer implements HttpRequestProcessor {
 			new FuseBaseRESTAPI(
 				fuseBase
 			);
-			
-		try {
-
-			this.currentJarFile =
-				new JarFile(
-					(new File(FuseBaseRESTAPI.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath())
-				);
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
 		
 		this.unrestrictedResourceFilePaths =
 			new String[] {
@@ -109,7 +97,7 @@ public class FuseBaseWebServer implements HttpRequestProcessor {
 			
 			boolean
 				isFile = HTTPServerThread.isFile(fileName),
-				isResourceFile = this.fuseBase.fileManager.isResourceFile(this.currentJarFile, fileName);
+				isResourceFile = this.fuseBase.fileManager.isResourceFile(fileName);
 			
 			// Every access to a fusebase.jar resource file must be authenticated
 			if(	isResourceFile &&
@@ -149,7 +137,6 @@ public class FuseBaseWebServer implements HttpRequestProcessor {
 				
 				this.fuseBase.fileManager.serveResourceFile(
 					output,
-					this.currentJarFile,
 					fileName,
 					httpServerThread.getFileBuffer()
 				);
@@ -201,10 +188,6 @@ public class FuseBaseWebServer implements HttpRequestProcessor {
 		
 		return false;
 		
-	}
-	
-	public JarFile currentJarFile() {
-		return this.currentJarFile;
 	}
 	
 }

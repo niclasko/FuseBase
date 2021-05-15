@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.io.Serializable;
+import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.io.DataOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.BufferedReader;
@@ -29,9 +30,13 @@ import java.io.FileWriter;
 import java.io.FileOutputStream;
 import java.net.URL;
 
+import java.util.ArrayList;
+
 public class FileManager implements Serializable {
 	
 	private HashMap<String, WebServerFile> outputFiles;
+
+	private transient JarFile jarFile;
 	
 	public FileManager() {
 		
@@ -39,11 +44,15 @@ public class FileManager implements Serializable {
 			new HashMap<String, WebServerFile>();
 			
 	}
+
+	public void setJarFile(JarFile jarFile) {
+		this.jarFile = jarFile;
+	}
 	
 	/*
 	** Checks whether jarFile contains fileName entry
 	*/
-	public boolean isResourceFile(JarFile jarFile, String fileName) throws Exception {
+	public boolean isResourceFile(String fileName) throws Exception {
 		
 		String jarEntryFileName = fileName;
 		
@@ -64,16 +73,12 @@ public class FileManager implements Serializable {
 		return (jarFile.getEntry(jarEntryFileName) != null);
 		
 	}
-	
-	/*
-	** Read a file from a jar and write to DataOutputStream
-	*/
-	public void serveResourceFile(DataOutputStream output, JarFile jarFile, String fileName, byte[] resourceFileBytes) throws Exception {
-		
+
+	public String fixJarEntryFileName(String fileName) {
 		String jarEntryFileName = fileName;
-		
+
 		if(jarFile.getEntry(fileName) == null) {
-			
+
 			if(jarEntryFileName.length() >= 1) {
 				if(jarEntryFileName.substring(0,1).equals("/")) {
 					jarEntryFileName = ".." + jarEntryFileName;
@@ -81,8 +86,18 @@ public class FileManager implements Serializable {
 					jarEntryFileName = "../" + jarEntryFileName;
 				}
 			}
-			
+
 		}
+
+		return jarEntryFileName;
+	}
+	
+	/*
+	** Read a file from a jar and write to DataOutputStream
+	*/
+	public void serveResourceFile(DataOutputStream output, String fileName, byte[] resourceFileBytes) throws Exception {
+		
+		String jarEntryFileName = this.fixJarEntryFileName(fileName);
 		
 		InputStream is =
 			jarFile.getInputStream(
@@ -114,14 +129,30 @@ public class FileManager implements Serializable {
 	/*
 	** Open a InputStream for a file from a jar file
 	*/
-	public InputStream getFileInputStreamFromJarFile(JarFile jarFile, String fileName) throws Exception {
-		
+	public JarEntry[] getJarEntriesFromJarFileDirectory(String path) throws Exception {
+		ArrayList<JarEntry> matchingJarEntries = new ArrayList<JarEntry>();
+		JarEntry jarEntry = null;
+		Enumeration<JarEntry> allJarEntries = jarFile.entries();
+		while(allJarEntries.hasMoreElements()) {
+			jarEntry = allJarEntries.nextElement();
+			if(jarEntry.getName().startsWith(path)) {
+				matchingJarEntries.add(jarEntry);
+			}
+		}
+		return matchingJarEntries.toArray(new JarEntry[0]);
+	}
+
+	/*
+	 ** Open a InputStream for a file from a jar file
+	 */
+	public InputStream getFileInputStreamFromJarFile(String fileName) throws Exception {
+
 		return jarFile.getInputStream(
 			jarFile.getEntry(
-				fileName
+				this.fixJarEntryFileName(fileName)
 			)
 		);
-		
+
 	}
 	
 	/*

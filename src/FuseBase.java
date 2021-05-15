@@ -26,7 +26,6 @@ import java.util.jar.JarFile;
 public class FuseBase implements Serializable {
 	
 	private String fuseBaseSerializationFilename;
-	private String fuseDBSerializationFilename;
 	
 	public DBConnectionManager dbConnectionManager;
 	public ScriptManager scriptManager;
@@ -39,6 +38,8 @@ public class FuseBase implements Serializable {
 	private FuseBase me;
 	
 	private transient ScriptAPI scriptAPI;
+
+	private transient JarFile jarFile;
 	
 	public FuseBase(String fuseBaseSerializationFilename) throws Exception {
 		
@@ -54,8 +55,6 @@ public class FuseBase implements Serializable {
 		
 		this.me = this;
 		
-		this.createScriptAPI();
-		
 		this.addShutdownHook();
 		
 	}
@@ -69,6 +68,7 @@ public class FuseBase implements Serializable {
 	}
 	
 	public void createScriptAPI() {
+		Script.setFuseBaseInstance(this);
 		this.scriptAPI = new ScriptAPI(this);
 		this.scheduler.setScriptAPI(this.scriptAPI);
 	}
@@ -92,11 +92,28 @@ public class FuseBase implements Serializable {
 				fuseBaseSerializationFilename
 			);
 		}
-		
+
+		fuseBase.setCurrentJarFile();
 		fuseBase.createScriptAPI();
-		
+
 		return fuseBase;
 		
+	}
+
+	public JarFile getJarFile() {
+		return this.jarFile;
+	}
+
+	private void setCurrentJarFile() {
+		try {
+			this.jarFile =
+				new JarFile(
+					(new File(FuseBaseRESTAPI.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath())
+				);
+			this.fileManager.setJarFile(this.jarFile);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void addShutdownHook() {
@@ -111,8 +128,11 @@ public class FuseBase implements Serializable {
 		try {
 			
 			this.scheduler().uninitialize();
-			
-			FileOutputStream fileOut = new FileOutputStream(this.fuseBaseSerializationFilename);
+
+			File fuseBaseSerializationFile = new File(this.fuseBaseSerializationFilename);
+			fuseBaseSerializationFile.createNewFile();
+
+			FileOutputStream fileOut = new FileOutputStream(fuseBaseSerializationFile);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(this);
 			out.close();

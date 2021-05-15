@@ -21,6 +21,8 @@ import javax.script.SimpleScriptContext;
 import java.io.Serializable;
 import java.io.DataOutput;
 import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.jar.JarEntry;
 
 /*
 
@@ -33,9 +35,36 @@ import java.net.URLEncoder;
 */
 
 public class Script implements Serializable {
-	
-	private static ScriptEngine engine =
+
+	private static ScriptEngine scriptEngine =
 		(new ScriptEngineManager()).getEngineByName("JavaScript");
+	private static FuseBase fuseBase;
+
+	public static void setFuseBaseInstance(FuseBase _fuseBase) {
+		fuseBase = fuseBase;
+	}
+
+	public static void loadGlobalScripts(ScriptContext scriptContext) {
+		try {
+
+			JarEntry[] jarEntries = fuseBase.fileManager.getJarEntriesFromJarFileDirectory(
+				"scripts/"
+			);
+
+			for(JarEntry jarEntry : jarEntries) {
+				scriptEngine.eval(
+					Utils.readInputStreamToString(
+						fuseBase.fileManager.getFileInputStreamFromJarFile(
+							jarEntry.getRealName()
+						)
+					),
+					scriptContext
+				);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	private String name;
 	private String source;
@@ -57,10 +86,10 @@ public class Script implements Serializable {
 		if(this.initialized) {
 			return;
 		}
-		
+
 		this.scriptContext = new SimpleScriptContext();
 		this.scriptBindings = scriptContext.getBindings(ScriptContext.ENGINE_SCOPE);
-		
+
 		this.scriptBindings.put(
 			"FuseBase",
 			scriptAPI
@@ -93,7 +122,6 @@ public class Script implements Serializable {
 	public void run(DataOutput output) throws Exception {
 		
 		if(!this.initialized) {
-			
 			return;
 		}
 		
@@ -102,7 +130,7 @@ public class Script implements Serializable {
 			output
 		);
 
-		Script.engine.eval(
+		this.scriptEngine.eval(
 			this.source,
 			this.scriptContext
 		);
@@ -131,7 +159,7 @@ public class Script implements Serializable {
 	}
 	
 	public static void runAnonymousScript(ScriptAPI scriptAPI, String[][] parameters, String[][] cookies, PersistedDataOutputStream output, String scriptSource) throws Exception {
-		
+
 		ScriptContext scriptContext = new SimpleScriptContext();
 		Bindings scriptBindings = scriptContext.getBindings(ScriptContext.ENGINE_SCOPE);
 		
@@ -154,8 +182,8 @@ public class Script implements Serializable {
 			"output",
 			output
 		);
-		
-		Script.engine.eval(
+
+		scriptEngine.eval(
 			scriptSource,
 			scriptContext
 		);

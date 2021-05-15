@@ -54,8 +54,8 @@
 									</button>
 									<ul class="dropdown-menu" style="min-width: 0px;">
 										<li><a href="javascript:void(null)" ng-click="fuseBaseClient.queries.runRegisteredQuery(q);" class="small">Here</a></li>
-										<li><a href="/connections/registeredquery?{{ fuseBaseClient.buildQueryString(q, {'$$hashKey': '', 'query': ''}) }}" target="_blank" class="small">JSON</a></li>
-										<li><a href="/connections/registeredquery?{{ fuseBaseClient.buildQueryString(q, {'$$hashKey': '', 'query': ''}) }}&outputType=CSV" target="_blank" class="small">CSV</a>
+										<li><a href="/api/connections/registeredquery?{{ fuseBaseClient.buildQueryString(q, {'$$hashKey': '', 'query': ''}) }}" target="_blank" class="small">JSON</a></li>
+										<li><a href="/api/connections/registeredquery?{{ fuseBaseClient.buildQueryString(q, {'$$hashKey': '', 'query': ''}) }}&outputType=CSV" target="_blank" class="small">CSV</a>
 									</ul>
 								</div>
 							</td>

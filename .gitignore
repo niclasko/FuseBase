@@ -1,2 +1,7 @@
 classes/
+.idea/
 build/*
+*.iml
+*.jar
+*.scratch
+.DS_Store

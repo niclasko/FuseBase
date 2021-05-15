@@ -1,7 +1,7 @@
 #!/bin/sh
 
 rm ./classes/*.class
-javac -Xlint:unchecked -source 1.7 -target 1.7 ./src/*.java -d ./classes
+javac -Xlint:unchecked -Xlint:deprecation -source 1.7 -target 1.8 ./src/*.java -d ./classes
 
 rm ./build/fusebase.jar
 
@@ -16,6 +16,6 @@ cp -r ./ssl ./build/
 
 cd ./classes
 
-jar cvfe ../build/fusebase.jar FuseBase ./* ../web/* ../ui/*
+jar cvfe ../build/fusebase.jar FuseBase ./* ../web/* ../ui/* ../scripts/*
 
 cd ..

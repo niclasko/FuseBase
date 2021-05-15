@@ -25,8 +25,11 @@ import java.lang.reflect.Method;
 import java.util.logging.Logger;
 import java.io.File;
 
-class DriverShim implements Driver {
-	
+public class DriverShim implements Driver {
+
+	private static final DriverShimClassLoader classLoader =
+		new DriverShimClassLoader(new URL[0], DriverShim.class.getClassLoader());
+
 	private Driver driver;
 	
 	DriverShim(Driver d) {
@@ -71,18 +74,20 @@ class DriverShim implements Driver {
 			jdbcDriverPath.substring(0, jdbcDriverPath.lastIndexOf("/") + 1);
 
 		File[] files = new File(jdbcDriverFolderPath).listFiles();
-		
-		URLClassLoader classLoader =
-			(URLClassLoader)ClassLoader.getSystemClassLoader();
+
+		/*URLClassLoader classLoader =
+			(URLClassLoader)ClassLoader.getSystemClassLoader();*/
 	
 		for(int i=0; i<files.length; i++) {
 			if(files[i].toString().lastIndexOf(".jar") > 0) {
 				
 				URL url = files[i].toURI().toURL();
-				
-				Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+
+				/*Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
 				method.setAccessible(true);
-				method.invoke(classLoader, url);
+				method.invoke(classLoader, url);*/
+
+				classLoader.addURL(url);
 				
 			}
 		}

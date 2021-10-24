@@ -69,7 +69,7 @@ ValidationQuery=
 ConnectionPoolSize=5
 
 [SQL Server]
-DriverPath=./jdbc_drivers/SQL Server/sqljdbc42.jar
+DriverPath=./jdbc_drivers/SQL Server/mssql-jdbc-9.2.1.jre11.jar
 ClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
 ConnectStringPattern=jdbc:sqlserver://server:port;databaseName=dbname
 ValidationQuery=

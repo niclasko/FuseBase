@@ -1250,6 +1250,8 @@ public class FuseBaseRESTAPI {
 				"Failed to connect to \"" + connectionName + "\". Error: " + e.getMessage(),
 				c.jsonCallbackFunction()
 			);
+
+			e.printStackTrace();
 		
 			return;
 		

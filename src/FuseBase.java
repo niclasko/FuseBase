@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 "Niclas Kjäll-Ohlsson, Bjørnar Fjøren"
+ * Copyright (c) 2018 "Niclas Kjall-Ohlsson, Bjornar Fjoren"
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
